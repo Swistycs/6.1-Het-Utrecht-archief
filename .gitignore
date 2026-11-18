@@ -1,0 +1,10 @@
+src/config/config.php
+
+src/public/uploads/*
+!src/public/uploads/.htaccess
+src/public/assets/video/*
+!src/public/assets/video/.gitkeep
+
+.DS_Store
+~$*
+~WRL*.tmp

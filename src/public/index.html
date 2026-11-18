@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ontmoet de Oudegracht – Het Utrechts Archief</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;700&display=swap">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin="" defer></script>
+  <script src="js/app.js" type="module"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="logo" href="./" aria-label="Het Utrechts Archief – opnieuw beginnen">
+      <img class="logo__mark" src="assets/img/logo-hua.svg" alt="" width="60" height="60">
+      <span class="logo__text">Het Utrechts<br>Archief</span>
+    </a>
+    <h1 class="topbar__title">Ontmoet de Oudegracht <span class="topbar__year">1929</span></h1>
+    <button type="button" class="btn btn--icon" id="btn-info" aria-haspopup="dialog" aria-label="Over deze applicatie">i</button>
+  </header>
+
+  <main class="stage">
+    <section class="block block--map" aria-labelledby="map-heading">
+      <h2 class="block__label" id="map-heading">Vaarroute</h2>
+      <div class="map-wrap"><div id="map"></div></div>
+    </section>
+
+    <section class="block block--film" aria-label="Film uit 1929">
+      <div class="video-frame">
+        <video id="film" playsinline muted preload="auto" aria-describedby="film-desc"></video>
+        <div id="film-placeholder" class="film-placeholder" hidden>
+          <p>De film uit 1929 volgt nog</p>
+          <p class="film-placeholder__time" id="placeholder-time">0:00</p>
+        </div>
+      </div>
+      <p id="film-desc" class="visually-hidden">
+        Stille zwart-witfilm uit 1929, opgenomen vanaf een varende boot op de Oudegracht,
+        van de Gaardbrug tot de Bezembrug.
+      </p>
+
+      <div class="timeline">
+        <div class="timeline__markers" id="timeline-markers"></div>
+        <label for="timeline" class="visually-hidden">Positie in de film</label>
+        <input type="range" id="timeline" min="0" max="100" step="0.1" value="0">
+      </div>
+
+      <div class="controls">
+        <button type="button" class="btn" id="btn-back" aria-label="10 seconden terug">−10 s</button>
+        <button type="button" class="btn btn--play" id="btn-play" aria-label="Afspelen">
+          <span aria-hidden="true" id="play-icon">▶</span>
+        </button>
+        <button type="button" class="btn" id="btn-forward" aria-label="10 seconden vooruit">+10 s</button>
+        <span class="time" aria-hidden="true"><span id="time-current">0:00</span> / <span id="time-total">0:00</span></span>
+      </div>
+    </section>
+
+    <section class="block block--info" aria-labelledby="info-title">
+      <p class="block__label" id="info-label">Onderweg</p>
+      <h2 class="info__title" id="info-title">Vaar mee over de Oudegracht</h2>
+      <p class="info__text" id="info-text"></p>
+      <div class="info__media" id="info-media"></div>
+      <div class="info__next" id="info-next" hidden>
+        <p class="info__next-label">Volgende stop</p>
+        <button type="button" class="btn btn--stop" id="btn-next">
+          <span class="stop-num" id="next-num" aria-hidden="true"></span>
+          <span id="next-title"></span>
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <button type="button" class="attract" id="attract" hidden>
+    <span class="attract__card">
+      <span class="attract__boat" aria-hidden="true">⛵</span>
+      <span class="attract__title">Tik om te varen over de Oudegracht van 1929</span>
+      <span class="attract__sub">Ontdek wat de filmcamera zag, bijna 100 jaar geleden</span>
+    </span>
+  </button>
+
+  <div class="visually-hidden" aria-live="polite" id="live"></div>
+
+  <dialog id="dlg-intro" class="dialog" aria-labelledby="intro-title">
+    <p class="block__label">Het Utrechts Archief</p>
+    <h2 id="intro-title">Welkom aan boord!</h2>
+    <p id="intro-text"></p>
+    <ol class="steps">
+      <li><span class="stop-num" aria-hidden="true">1</span> Druk op afspelen en vaar mee</li>
+      <li><span class="stop-num" aria-hidden="true">2</span> Tik op een punt op de kaart</li>
+      <li><span class="stop-num" aria-hidden="true">3</span> Bekijk foto’s en verhalen uit het archief</li>
+    </ol>
+    <form method="dialog"><button class="btn btn--play btn--wide">Start</button></form>
+  </dialog>
+
+  <dialog id="dlg-colofon" class="dialog" aria-labelledby="colofon-title">
+    <p class="block__label">Colofon</p>
+    <h2 id="colofon-title">Over deze applicatie</h2>
+    <p id="colofon-text"></p>
+    <form method="dialog"><button class="btn btn--play btn--wide">Sluiten</button></form>
+  </dialog>
+</body>
+</html>

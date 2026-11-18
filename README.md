@@ -1,0 +1,85 @@
+# Ontmoet de Oudegracht
+
+Interactieve webapplicatie + CMS voor de tentoonstelling **‘Ontmoet de Oudegracht’** van Het Utrechts Archief (maart 2027).
+De film uit 1929 (vanaf een varende boot, van de Gaardbrug tot de Bezembrug) speelt naast een kaart die live meeloopt met de vaarroute. Bij punten langs de gracht verschijnen verhalen en bronnen uit het archief.
+
+Gemaakt door **De Werfwebbers**: Levi Bhargava & Sem Stil.
+
+## Mappen
+
+```
+docs/            debriefing, technisch ontwerp, plan van aanpak, offerte, planning
+docker/          Dockerfile voor de lokale PHP-server
+src/
+├── config/      config.php (niet in Git) + config.example.php
+├── database/    schema.sql, seed.sql, create-admin.php
+├── includes/    gedeelde PHP-code (db, auth, csrf, validate, upload, cms_layout)
+└── public/      webroot
+    ├── index.html   de webapplicatie
+    ├── css/ js/     stijl en ES-modules (app, player, map, points, idle, cms)
+    ├── api/         content.php (JSON, alleen lezen)
+    ├── cms/         beheeromgeving (login, points, point-edit, route, settings, users)
+    ├── assets/      logo, video, geluiden
+    └── uploads/     uploads uit het CMS (geen PHP-uitvoer)
+```
+
+## Lokaal draaien (Docker)
+
+```bash
+cp src/config/config.example.php src/config/config.php   # eenmalig
+docker compose up -d --build
+```
+
+- Webapplicatie: http://localhost:8080
+- API: http://localhost:8080/api/content.php
+- MySQL: localhost:3307 (gebruiker `oudegracht` / `oudegracht_dev`)
+
+De database wordt bij de eerste start gevuld uit `src/database/schema.sql` en `seed.sql`.
+Na een wijziging in die bestanden opnieuw opbouwen: `docker compose down -v && docker compose up -d`.
+
+## De film
+
+De film staat **niet** in Git (te groot, en het is materiaal van HUA). Haal hem eenmalig op met [yt-dlp](https://github.com/yt-dlp/yt-dlp) (`brew install yt-dlp`):
+
+```bash
+yt-dlp -f hd -o src/public/assets/video/oudegracht-1929.mp4 "https://www.facebook.com/reel/668688640594552"
+```
+
+Dit is de versie van Facebook (768×576, VP9, 3:03). Als HUA een betere versie aanlevert: bestand in `src/public/assets/video/` zetten en het pad + de lengte aanpassen via **CMS → Instellingen**.
+Is `video_file` leeg, dan draait er een nep-klok met lengte `video_duration`, zodat de app ook zonder film werkt.
+
+## CMS
+
+http://localhost:8080/cms/ – maak eerst een beheerder aan (het wachtwoord wordt gevraagd en niet getoond):
+
+```bash
+docker compose exec web php /var/www/database/create-admin.php "Jouw Naam" jij@voorbeeld.nl
+```
+
+| Pagina | Wat kun je er doen |
+|---|---|
+| Punten | Overzicht, nieuw punt, bewerken, (de)publiceren |
+| Punt bewerken | NL/EN-tekst, tijden met ‘Huidige videotijd gebruiken’, plek kiezen op de kaart, archiefbronnen uploaden (alt-tekst + bron verplicht), verwijderen met bevestiging |
+| Route | IJkpunten van de vaarroute (tijd in de film → plek op de kaart) |
+| Instellingen | Intro, colofon, idle-tijd, videobestand en lengte |
+| Gebruikers | Alleen voor beheerders: redacteuren en beheerders toevoegen/verwijderen |
+
+Beveiliging (TO H6): wachtwoorden met `password_hash`, min. 12 tekens, blokkade na 5 mislukte pogingen (15 min), sessie verloopt na 30 min, CSRF-token op elk formulier, alle uitvoer via `htmlspecialchars`, uploads gecontroleerd op echte bestandsinhoud (max 5 MB, willekeurige naam, geen PHP in `/uploads`), PDO prepared statements, CSP-header.
+
+## Installatie op een server
+
+- Apache 2.4 + HTTPS, PHP 8.2+ (pdo_mysql, fileinfo, mbstring, gd), MySQL 8 / MariaDB 10.6+
+- Webroot = `src/public`; `src/config` en `src/includes` staan erbuiten
+- Importeer `schema.sql` (en voor een demo `seed.sql`), vul `config.php` in
+- Gebruik een databasegebruiker met alleen SELECT, INSERT, UPDATE en DELETE
+
+## Status
+
+- [x] Sprint 1: database + seed, JSON-API, basislayout, videospeler + tijdlijn, Leaflet-kaart met route, synchronisatie video ↔ kaart
+- [x] Sprint 2: layout in HUA-huisstijl (3 kolommen), infokolom met bronnen + ‘volgende stop’, attract mode + idle-reset, CMS (login, punten, bronnen, route, instellingen, gebruikers), echte film
+- [ ] Nog uit sprint 2: geluidseffecten (audio.js), eerste usability-test
+- [ ] Sprint 3: tests (WCAG, browsers, touch, beveiliging, duurtest), NL/EN, testrapport, demovideo
+
+De inhoud in `seed.sql` is **placeholder**. De brugposities komen uit OpenStreetMap; de tijden zijn gelijk verdeeld over de film en moeten nog worden afgestemd op wat er echt in beeld is (via CMS → Route en Punten). Teksten volgen uit ‘Bronmateriaal en info’ van HUA.
+
+**Huisstijl:** kleuren en stijl komen uit de CSS van hetutrechtsarchief.nl (rood `#d72f19`, petrolgroen `#247065`, blauw `#455cc7`, `#333` op `#f6f6f6`, strakke hoeken, harde schaduw). Het lettertype van HUA (Akzidenz-Grotesk Next) is een licentiefont; we vallen terug op Archivo. Controleer alles nog tegen `HUA_huisstijlmanual digitaal_2.pdf` (Notion).
