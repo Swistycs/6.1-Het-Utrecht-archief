@@ -18,6 +18,7 @@ export function createMap({ route, points, onPointSelect }) {
     attributionControl: true,
     tap: true,
     keyboard: true,
+    zoomSnap: 0.25,
   });
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
@@ -25,9 +26,9 @@ export function createMap({ route, points, onPointSelect }) {
   }).addTo(map);
   const latlngs = route.map((r) => [r.lat, r.lng]);
   const line = L.polyline(latlngs, { color: '#247065', weight: 7, opacity: 0.9 }).addTo(map);
-  map.fitBounds(line.getBounds(), { padding: [40, 40] });
+  map.fitBounds(line.getBounds(), { padding: [30, 30] });
 
-  const size = Math.max(56, Math.round(window.innerWidth * 0.035));
+  const size = Math.max(40, Math.round(window.innerWidth * 0.022));
   const markers = new Map();
   points.forEach((p, i) => {
     const icon = L.divIcon({

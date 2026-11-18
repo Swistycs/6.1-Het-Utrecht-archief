@@ -2,6 +2,7 @@ import { createPlayer } from './player.js';
 import { createMap } from './map.js';
 import { createPoints } from './points.js';
 import { createIdle } from './idle.js';
+import { createStopPopup } from './popup.js';
 
 const API_URL = 'api/content.php';
 
@@ -51,12 +52,26 @@ async function init() {
     onPointSelect: (p) => sailTo(p),
   });
 
+  let inAttract = true;
+
+  const popup = createStopPopup({
+    points,
+    onContinue: () => player.play(),
+  });
+
   const info = createPoints({
     points,
+    duration: Number(settings.video_duration) || 1,
     onSelect: (p) => sailTo(p),
     onChange: (p) => {
       map.setActive(p ? p.id : null);
-      player?.setActiveMarker(p ? p.id : null);
+      if (!p || !player) return;
+      if (inAttract) {
+        popup.show(p, { teaser: true });
+      } else {
+        player.pause();
+        popup.show(p);
+      }
     },
   });
 
@@ -67,7 +82,6 @@ async function init() {
       map.setTime(t);
       info.update(t);
     },
-    onMarker: (p) => sailTo(p),
   });
 
   function sailTo(p) {
@@ -75,12 +89,17 @@ async function init() {
     player.play();
   }
 
+  info.layout(player.duration);
+  document.getElementById('btn-play').addEventListener('click', () => popup.hide());
+
   window.addEventListener('resize', () => map.invalidateSize());
 
   const attract = document.getElementById('attract');
   const idle = createIdle({ seconds: settings.idle_seconds, onIdle: enterAttract });
 
   function enterAttract() {
+    inAttract = true;
+    popup.hide();
     idle.stop();
     [dialogs.intro, dialogs.colofon].forEach((d) => d.open && d.close());
     player.seek(0);
@@ -91,6 +110,8 @@ async function init() {
   }
 
   function leaveAttract() {
+    inAttract = false;
+    popup.hide();
     attract.hidden = true;
     player.setLoop(false);
     player.pause();

@@ -6,87 +6,60 @@ export function nextPointAfter(points, t) {
   return points.find((p) => p.time_start > t) || null;
 }
 
-const INTRO = {
-  title: 'Vaar mee over de Oudegracht',
-  text: 'In 1929 voer iemand met een filmcamera over de Oudegracht. Vaar mee en ontdek wat er langs de gracht te zien was.',
-};
-
-export function createPoints({ points, onChange, onSelect, lang = 'nl' }) {
-  const block = document.querySelector('.block--info');
-  const label = document.getElementById('info-label');
-  const title = document.getElementById('info-title');
-  const text = document.getElementById('info-text');
-  const mediaBox = document.getElementById('info-media');
-  const nextBox = document.getElementById('info-next');
-  const nextBtn = document.getElementById('btn-next');
-  const nextNum = document.getElementById('next-num');
-  const nextTitle = document.getElementById('next-title');
+export function createPoints({ points, duration, onChange, onSelect }) {
+  const list = document.getElementById('stops');
   const live = document.getElementById('live');
 
-  const field = (obj, name) => obj[`${name}_${lang}`] || obj[`${name}_nl`] || '';
-  const numberOf = (p) => points.indexOf(p) + 1;
+  const items = points.map((p, i) => {
+    const li = document.createElement('li');
+    li.className = 'vstop';
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'vstop__btn';
+    const dot = document.createElement('span');
+    dot.className = 'vstop__dot';
+    dot.setAttribute('aria-hidden', 'true');
+    dot.textContent = String(i + 1);
+    const name = document.createElement('span');
+    name.className = 'vstop__name';
+    name.textContent = p.title_nl;
+    btn.append(dot, name);
+    btn.setAttribute('aria-label', `Stop ${i + 1}: ${p.title_nl}. Vaar hierheen.`);
+    btn.addEventListener('click', () => onSelect?.(p));
+    li.append(btn);
+    list.append(li);
+    return { p, li, btn };
+  });
+
+  function layout(total) {
+    items.forEach(({ p, li }) => {
+      li.style.left = `${Math.min(100, (p.time_start / total) * 100)}%`;
+    });
+  }
+  layout(duration);
 
   let activeId;
-  let nextId;
-  let nextPoint = null;
 
-  nextBtn.addEventListener('click', () => { if (nextPoint) onSelect?.(nextPoint); });
-
-  function renderMedia(p) {
-    mediaBox.replaceChildren(...(p ? p.media : []).map((m) => {
-      const fig = document.createElement('figure');
-      const img = document.createElement('img');
-      img.src = m.url;
-      img.alt = field(m, 'alt');
-      img.loading = 'lazy';
-      const cap = document.createElement('figcaption');
-      cap.textContent = [field(m, 'caption'), m.year, m.source].filter(Boolean).join(' · ');
-      fig.append(img, cap);
-      return fig;
-    }));
-  }
-
-  function renderActive(p) {
-    if (p) {
-      label.textContent = `Stop ${numberOf(p)} van ${points.length}`;
-      title.textContent = field(p, 'title');
-      text.textContent = field(p, 'text');
-      live.textContent = `${field(p, 'title')}. ${field(p, 'text')}`;
-    } else {
-      label.textContent = 'Onderweg';
-      title.textContent = INTRO.title;
-      text.textContent = INTRO.text;
-    }
-    renderMedia(p);
-    block.classList.remove('is-changed');
-    void block.offsetWidth;
-    block.classList.add('is-changed');
-  }
-
-  function renderNext(n) {
-    nextPoint = n;
-    nextBox.hidden = !n;
-    if (!n) return;
-    nextNum.textContent = String(numberOf(n));
-    nextTitle.textContent = field(n, 'title');
-    nextBtn.setAttribute('aria-label', `Vaar naar de volgende stop: ${field(n, 'title')}`);
+  function render(t, active) {
+    items.forEach(({ p, li, btn }) => {
+      const current = active && p.id === active.id;
+      li.classList.toggle('is-current', Boolean(current));
+      li.classList.toggle('is-done', !current && p.time_end <= t);
+      if (current) btn.setAttribute('aria-current', 'step');
+      else btn.removeAttribute('aria-current');
+    });
   }
 
   return {
+    layout,
     update(t) {
       const p = activePointAt(points, t);
+      render(t, p);
       const id = p ? p.id : null;
-      if (id !== activeId) {
-        activeId = id;
-        renderActive(p);
-        onChange?.(p);
-      }
-      const n = nextPointAfter(points, t);
-      const nid = n ? n.id : null;
-      if (nid !== nextId) {
-        nextId = nid;
-        renderNext(n);
-      }
+      if (id === activeId) return;
+      activeId = id;
+      if (p) live.textContent = `${p.title_nl}. ${p.text_nl}`;
+      onChange?.(p);
     },
   };
 }
