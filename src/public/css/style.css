@@ -211,12 +211,12 @@ button { font: inherit; color: inherit; touch-action: manipulation; }
 .vaarlijn {
   --dot: calc(var(--touch) * 0.75);
   --boat: calc(var(--touch) * 0.6);
-  --y: calc(var(--boat) + var(--dot) / 2);
+  --y: calc(var(--boat) + var(--dot) / 2 + 10px);
   --progress: 0%;
   position: relative;
   flex: 1;
   min-width: 0;
-  height: calc(var(--boat) + var(--dot) + 2.4em);
+  height: calc(var(--boat) + var(--dot) + 2.4em + 10px);
   margin-inline: calc(var(--dot) / 2 + 8px);
 }
 .vaarlijn__track, .vaarlijn__fill {
@@ -230,7 +230,7 @@ button { font: inherit; color: inherit; touch-action: manipulation; }
 .vaarlijn__boat {
   position: absolute;
   left: var(--progress);
-  top: calc(var(--y) - var(--dot) / 2 - var(--boat));
+  top: calc(var(--y) - var(--dot) * 0.6 - var(--boat) - 6px);
   width: calc(var(--boat) * 1.1);
   height: var(--boat);
   transform: translateX(-50%);
@@ -362,3 +362,19 @@ button { font: inherit; color: inherit; touch-action: manipulation; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
+
+.stop-popup { max-height: calc(100% - 2 * var(--pad)); }
+.stop-popup__figure img#popup-img { min-height: 12em; }
+.stop-popup__thumbs { display: flex; gap: 6px; padding: 0 0.7em 0.7em; }
+.stop-popup__thumbs:empty { display: none; }
+.stop-popup__thumb {
+  flex: 1;
+  height: calc(var(--touch) * 0.9);
+  padding: 0;
+  border: 3px solid transparent;
+  background: none;
+  cursor: pointer;
+}
+.stop-popup__thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.stop-popup__thumb[aria-pressed="true"] { border-color: var(--hua-red); }
+.stop-popup__text { font-size: var(--fs-base); line-height: 1.5; }

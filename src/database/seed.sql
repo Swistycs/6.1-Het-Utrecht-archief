@@ -1,27 +1,50 @@
 SET NAMES utf8mb4;
 
 INSERT INTO settings (setting_key, value) VALUES
-('video_file',     'assets/video/oudegracht-1929.mp4'),
+('video_file', 'assets/video/oudegracht-1929.mp4'),
 ('video_duration', '182.8'),
-('idle_seconds',   '90'),
-('intro_nl', 'Vaar mee over de Oudegracht van 1929! Druk op afspelen, of tik op een punt op de kaart om erheen te varen.'),
-('intro_en', 'Sail along the Oudegracht in 1929! Press play, or tap a point on the map to sail there.'),
-('colofon_nl', 'Deze applicatie is gemaakt door De Werfwebbers (Levi Bhargava en Sem Stil) voor Het Utrechts Archief, bij de tentoonstelling ‘Ontmoet de Oudegracht’ (2027).'),
-('colofon_en', 'This application was made by De Werfwebbers (Levi Bhargava and Sem Stil) for Het Utrechts Archief, for the exhibition ‘Meet the Oudegracht’ (2027).');
+('idle_seconds', '90'),
+('intro_nl', 'Tussen de Gaardbrug en de Bezembrug ligt een bijzonder stuk van de Utrechtse Oudegracht. Je vindt er historische bruggen, oude handelshuizen, werfkelders en sporen van het middeleeuwse handelsleven. Een aantal plekken worden tijdens het boottochtje uitgelicht.'),
+('intro_en', 'Between the Gaardbrug and the Bezembrug lies a special stretch of the Oudegracht in Utrecht, with historic bridges, old merchant houses, wharf cellars and traces of medieval trade.'),
+('colofon_nl', 'Deze applicatie is gemaakt door De Werfwebbers (Levi Bhargava en Sem Stil) voor Het Utrechts Archief, bij de tentoonstelling ‘Ontmoet de Oudegracht’ (2027). Film en afbeeldingen: collectie Het Utrechts Archief.'),
+('colofon_en', 'This application was made by De Werfwebbers (Levi Bhargava and Sem Stil) for Het Utrechts Archief, for the exhibition ‘Meet the Oudegracht’ (2027). Film and images: collection of Het Utrechts Archief.');
 
 INSERT INTO route_track (video_time, lat, lng) VALUES
-(   0.00, 52.089199, 5.121168),
-(  34.28, 52.089800, 5.120780),
-(  72.36, 52.090406, 5.120380),
-( 106.63, 52.090980, 5.120040),
-( 140.91, 52.091552, 5.119702),
-( 163.76, 52.091610, 5.119060),
-( 182.80, 52.091658, 5.118418);
+(0.00, 52.089000, 5.121300),
+(14.30, 52.089199, 5.121168),
+(30.50, 52.089420, 5.121010),
+(40.80, 52.089560, 5.120900),
+(58.80, 52.089800, 5.120700),
+(101.40, 52.090406, 5.120380),
+(134.80, 52.090880, 5.120120),
+(159.80, 52.091230, 5.119900),
+(182.80, 52.091552, 5.119702);
 
-INSERT INTO points (title_nl, title_en, text_nl, text_en, time_start, time_end, lat, lng, sound, sort_order, is_published) VALUES
-('Gaardbrug',    'Gaardbrug',     '[Placeholder] Hier begint de vaartocht uit 1929.', '[Placeholder] This is where the 1929 boat trip begins.',           0.0, 19.0, 52.089199, 5.121168, 'water', 1, 1),
-('Werven',       'Wharves',       '[Placeholder] Langs de gracht liggen de werven: kades op waterniveau waar goederen werden gelost.', '[Placeholder] Along the canal are the wharves: quays at water level where goods were unloaded.', 30.5, 53.3, 52.089800, 5.120780, 'stad', 2, 1),
-('Maartensbrug', 'Maartensbrug',  '[Placeholder] Tekst over de Maartensbrug volgt.', '[Placeholder] Text about the Maartensbrug to follow.',           64.7, 87.6, 52.090406, 5.120380, 'voetstappen', 3, 1),
-('Werfkelders',  'Wharf cellars', '[Placeholder] Achter de werven liggen kelders onder de straat.', '[Placeholder] Behind the wharves, cellars run under the street.', 99.0, 121.9, 52.090980, 5.120040, 'water', 4, 1),
-('Stadhuisbrug', 'Stadhuisbrug',  '[Placeholder] Tekst over de Stadhuisbrug volgt.', '[Placeholder] Text about the Stadhuisbrug to follow.',          133.3, 156.1, 52.091552, 5.119702, 'markt', 5, 1),
-('Bezembrug',    'Bezembrug',     '[Placeholder] Hier eindigt de film.', '[Placeholder] This is where the film ends.',                              169.1, 182.8, 52.091658, 5.118418, 'water', 6, 1);
+INSERT INTO points (id, title_nl, text_nl, time_start, time_end, lat, lng, sort_order, is_published) VALUES
+(1, 'Gaardbrug', 'De Gaardbrug is een van de bruggen over de Utrechtse Oudegracht en ontleent haar naam aan de vroegere bisschoppelijke tuin, die ook wel de ‘gaard’ werd genoemd. Vanaf de brug is er zicht op de Oudegracht en de Domtoren, dit maakt het een populaire plek om foto’s te maken.', 12.3, 28.5, 52.089199, 5.121168, 1, 1),
+(2, 'De middeleeuwse werven en werfkelders', 'Langs de gracht zie je de bijzondere combinatie van een hoger gelegen straat en een lager gelegen werf aan het water. Handelaren gebruikten de werfkelders om goederen op te slaan en rechtstreeks vanaf schepen aan te voeren. Zo groeide de Oudegracht uit tot een belangrijke handelsroute door de stad.', 28.5, 38.8, 52.089420, 5.121010, 2, 1),
+(3, 'Café De Postillon', 'Bij de Gaardbrug staat het pand van Café De Postillon (Lijnmarkt 50).', 38.8, 56.8, 52.089560, 5.120900, 3, 1),
+(4, 'Lijnmarkt en Lichte Gaard', 'Aan de ene kant van de gracht zie je de achterkant van de huizen aan de Lijnmarkt, aan de andere kant de Lichte Gaard. Op de achtergrond ligt de Maartensbrug.', 56.8, 99.4, 52.089800, 5.120700, 4, 1),
+(5, 'Maartensbrug', 'De Maartensbrug is de oudste brug over de Utrechtse Oudegracht. De brug werd oorspronkelijk de Borchbrug genoemd, omdat hij toegang gaf tot de bisschoppelijke burcht op de plek van het huidige Domplein. De eerste stenen brug werd in 1404 gebouwd en in 1906 verbreed om ruimte te maken voor het toenemende verkeer en de paardentram. De huidige naam verwijst naar Sint-Maarten, de beschermheilige van Utrecht.', 99.4, 132.8, 52.090406, 5.120380, 5, 1),
+(6, 'Vismarkt', 'De Vismarkt is de oudste markt van Utrecht. Al eeuwenlang wordt op het gedeelte van de Oudegracht tussen de Stadhuisbrug en de Maartensbrug vis verhandeld. Dit deel van de gracht ontleent zijn naam dan ook aan de markt.', 132.8, 157.8, 52.090880, 5.120120, 6, 1),
+(7, 'Kalisbrug', 'De Kalisbrug, ook wel Visbrug genoemd, vormde een belangrijk onderdeel van de Vismarkt en diende als visafslag. Wanneer er voldoende vis was aangevoerd, kondigde de stadsomroeper de verkoop aan. De vis werd vers gehouden in viskaren die in de gracht hingen en verkocht vanaf visbanken op de brug. De traditionele vismarkt verdween aan het begin van de 20e eeuw, maar in de winkels aan de Vismarkt bleven nog lange tijd visverkopers actief. De laatste traditionele viswinkel sloot in 1970.', 157.8, 180.8, 52.091230, 5.119900, 7, 1),
+(8, 'Stadhuisbrug en het stadhuis', 'De Stadhuisbrug dankt haar naam aan het Utrechtse stadhuis dat direct aan de brug ligt. Op deze plek zetelde het stadsbestuur al vanaf de 14e eeuw. De brug ontstond in de 16e eeuw, toen twee bestaande bruggen, de Broodbrug en de Huidenbrug, met elkaar werden verbonden en overkluisd. Het plein dat hierdoor ontstond, werd gebruikt voor openbare afkondigingen van besluiten van het stadsbestuur en kreeg later de naam Stadhuisbrug.', 180.8, 182.8, 52.091552, 5.119702, 8, 1);
+
+INSERT INTO media (point_id, file_path, alt_nl, caption_nl, source, sort_order) VALUES
+(1, 'e154e77cbae1bbade0538f04000a554f.jpg', 'De Oudegracht te Utrecht, vanaf de Gaardbrug, met links de achtergevels van de panden aan de Lijnmarkt en rechtse de Donkere Gaard', 'Gezicht op de Oudegracht te Utrecht, vanaf de Gaardbrug, met links de achtergevels van de panden aan de Lijnmarkt en rechtse de Donkere Gaard.', 'Het Utrechts Archief, catalogusnummer 903109 · Het Utrechts Archief, fotograaf/filmer', 1),
+(1, '0b35692a2efe5c49924ab82e3b6fea43.jpg', 'Een doorkijk onder de boog van de Gaardbrug over de Oudegracht te Utrecht met op de achtergrond de Maartensbrug en rechts de Donkere Gaard', 'Afbeelding van een doorkijk onder de boog van de Gaardbrug over de Oudegracht te Utrecht met op de achtergrond de Maartensbrug en rechts de Donkere Gaard.', 'Het Utrechts Archief, catalogusnummer 22122 · Stevens, C., fotograaf', 2),
+(2, '17304feb14dd50b580b52031dbdae08c.jpg', 'De werfkelder ter hoogte van het pand Oudegracht 190 te Utrecht, met links een gedeelte van de Gaardbrug', 'Gezicht op de werfkelder ter hoogte van het pand Oudegracht 190 te Utrecht, met links een gedeelte van de Gaardbrug.', 'Het Utrechts Archief, catalogusnummer 67316 · Gemeentearchief Utrecht, fotograaf', 1),
+(3, 'ff48325ff02695b5e0538f04000a4889.jpg', 'De voorgevel van het pand Lijnmarkt 50 (Café de Postillon) bij de Gaardbrug te Utrecht', 'Gezicht op de voorgevel van het pand Lijnmarkt 50 (Café de Postillon) bij de Gaardbrug te Utrecht.', 'Het Utrechts Archief, catalogusnummer 906087 · Goosen, D.C., fotograaf', 1),
+(4, '914585185317b66ce0534701000a4ffb.jpg', 'Gezicht over de Oudegracht te Utrecht met rechts de Lichte Gaard, in het midden de Maartensbrug en links de achtergevels van enkele huizen aan de Lijnmarkt', 'Gezicht over de Oudegracht te Utrecht met rechts de Lichte Gaard, in het midden de Maartensbrug en links de achtergevels van enkele huizen aan de Lijnmarkt.', 'Het Utrechts Archief, catalogusnummer 835793 · Fotodienst GAU, fotograaf', 1),
+(4, 'e7b5ae826b105025ba2d34396da909a1.jpg', 'De voorgevels van de panden Lichte Gaard 8-lager te Utrecht met op de achtergrond de Maartensbrug over de Oudegracht en de Vismarkt', 'Gezicht op de voorgevels van de panden Lichte Gaard 8-lager te Utrecht met op de achtergrond de Maartensbrug over de Oudegracht en de Vismarkt.', 'Het Utrechts Archief, catalogusnummer 22275 · Kruythof, H., fotograaf', 2),
+(4, 'fcc5d27d5122834be0538f04000a363d.jpg', 'Grote ijspegels aan de afvoeren naar de Oudegracht, onder de Lichte Gaard te Utrecht, vanaf de Maartensbrug', 'Afbeelding van grote ijspegels aan de afvoeren naar de Oudegracht, onder de Lichte Gaard te Utrecht, vanaf de Maartensbrug.', 'Het Utrechts Archief, catalogusnummer 905747 · Goosen, D.C., fotograaf', 3),
+(5, 'c744769e072555d49e2e03e92dbcb604.jpg', 'De Maartensbrug over de Oudegracht te Utrecht vanaf de Gaardbrug; op de achtergrond het Stadhuis', 'Gezicht op de Maartensbrug over de Oudegracht te Utrecht vanaf de Gaardbrug; op de achtergrond het Stadhuis.', 'Het Utrechts Archief, catalogusnummer 822378 · Fotodienst GAU, fotograaf', 1),
+(5, '62665b8ea2525ec3a01eda19075cf809.jpg', 'De Maartensbrug over de Oudegracht te Utrecht, vanaf de werf onder de Lichte Gaard; op de achtergrond de achtergevels van enkele panden aan de Choorstraat', 'Gezicht op de Maartensbrug over de Oudegracht te Utrecht, vanaf de werf onder de Lichte Gaard; op de achtergrond de achtergevels van enkele panden aan de Choorstraat.', 'Het Utrechts Archief, catalogusnummer 822375 · Fotodienst GAU, fotograaf', 2),
+(5, 'b2bd88e3de5b2173e0534701000a486f.jpg', 'Een schuit met kratten in de Oudegracht te Utrecht, ter hoogte van de Maartensbrug', 'Afbeelding van een schuit met kratten in de Oudegracht te Utrecht, ter hoogte van de Maartensbrug.', 'Het Utrechts Archief, catalogusnummer 406922 · Budde, S., fotograaf', 3),
+(6, '72dd2dcb9bac546fbbbcf5c1111cc735.jpg', 'De restauratie van de kelder aan de Zoutmarkt achter het pand Choorstraat 42 te Utrecht. Links een gedeelte van de Maartensbrug over de Oudegracht', 'Afbeelding van de restauratie van de kelder aan de Zoutmarkt achter het pand Choorstraat 42 te Utrecht. Links een gedeelte van de Maartensbrug over de Oudegracht.', 'Het Utrechts Archief, catalogusnummer 816418 · Werf, F.F. van der, fotograaf', 1),
+(7, '452c4ef2e0f15eda9acadf86f8e57f51.jpg', 'De Oudegracht en de Vismarkt te Utrecht uit het zuiden, met de Kalisbrug met het visafslaghuisje en op de achtergrond de zijgevel van het stadhuis', 'Gezicht op de Oudegracht en de Vismarkt te Utrecht uit het zuiden, met de Kalisbrug met het visafslaghuisje en op de achtergrond de zijgevel van het stadhuis.', 'Het Utrechts Archief, catalogusnummer 603347 · Dijk, W.C. van (1826-1881), fotograaf/tekenaar', 1),
+(7, 'b92f162a1fab12c0e0534701000a2676.jpg', 'Het terras op de Kalisbrug te Utrecht, met op de achtergrond de panden aan de Vismarkt', 'Afbeelding van het terras op de Kalisbrug te Utrecht, met op de achtergrond de panden aan de Vismarkt.', 'Het Utrechts Archief, catalogusnummer 852310 · Euro Color Cards, fotograaf', 2),
+(7, 'b92c390a7bf7cb12e0534701000ab712.jpg', 'De Kalisbrug te Utrecht, metop de voorgrond een terras op de werf langs de Oudegracht, geheel links de huizen aan de Zoutmarkt en rechts de Vismarkt. Op de achtergrond het Stadhuis', 'Gezicht op de Kalisbrug te Utrecht, metop de voorgrond een terras op de werf langs de Oudegracht, geheel links de huizen aan de Zoutmarkt en rechts de Vismarkt. Op de achtergrond het Stadhuis.', 'Het Utrechts Archief, catalogusnummer 852298 · Euro Color Cards, fotograaf', 3),
+(8, 'aa8056d41ab75229b8d85a70192c714d.jpg', 'De westzijde van de Stadhuisbrug over de Oudegracht te Utrecht, uit het zuidwesten', 'Gezicht op de westzijde van de Stadhuisbrug over de Oudegracht te Utrecht, uit het zuidwesten.', 'Het Utrechts Archief, catalogusnummer 83650 · Fotodienst GAU, fotograaf', 1),
+(8, 'db73d181f47bbae0e0538f04000ac07c.jpg', 'Het terras aan de Oudegracht te Utrecht ter hoogte van de Stadhuisbrug', 'Gezicht op het terras aan de Oudegracht te Utrecht ter hoogte van de Stadhuisbrug.', 'Het Utrechts Archief, catalogusnummer 856849 · Vermeulen, J.M., fotograaf', 2),
+(8, 'b92bb223d89518e0e0534701000a7b09.jpg', 'De Oudegracht te Utrecht, vanaf de Stadhuisbrug, met het gebouw van de bank Vlaer en Kol (Oudegracht 158) en links de bioscopen Camera en Studio', 'Gezicht op de Oudegracht te Utrecht, vanaf de Stadhuisbrug, met het gebouw van de bank Vlaer en Kol (Oudegracht 158) en links de bioscopen Camera en Studio.', 'Het Utrechts Archief, catalogusnummer 852288 · Euro Color Cards, fotograaf', 3);

@@ -85,8 +85,10 @@ async function init() {
   });
 
   function sailTo(p) {
+    player.pause();
     player.seek(p.time_start);
-    player.play();
+    if (inAttract) return;
+    popup.show(p);
   }
 
   info.layout(player.duration);

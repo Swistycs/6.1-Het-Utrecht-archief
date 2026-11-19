@@ -31,14 +31,30 @@ export function createPoints({ points, duration, onChange, onSelect }) {
     return { p, li, btn };
   });
 
+  let activeId;
+
+  function fitLabels() {
+    const names = items.map(({ li }) => li.querySelector('.vstop__name'));
+    names.forEach((n) => { n.style.visibility = ''; });
+    const shown = [];
+    const overlaps = (r) => shown.some((s) => r.left < s.right + 12 && r.right > s.left - 12);
+    const order = [...items.keys()].sort((a, b) =>
+      (items[b].p.id === activeId) - (items[a].p.id === activeId));
+    order.forEach((i) => {
+      const r = names[i].getBoundingClientRect();
+      if (overlaps(r)) names[i].style.visibility = 'hidden';
+      else shown.push(r);
+    });
+  }
+
   function layout(total) {
     items.forEach(({ p, li }) => {
       li.style.left = `${Math.min(100, (p.time_start / total) * 100)}%`;
     });
+    fitLabels();
   }
   layout(duration);
-
-  let activeId;
+  window.addEventListener('resize', fitLabels);
 
   function render(t, active) {
     items.forEach(({ p, li, btn }) => {
@@ -58,6 +74,7 @@ export function createPoints({ points, duration, onChange, onSelect }) {
       const id = p ? p.id : null;
       if (id === activeId) return;
       activeId = id;
+      fitLabels();
       if (p) live.textContent = `${p.title_nl}. ${p.text_nl}`;
       onChange?.(p);
     },

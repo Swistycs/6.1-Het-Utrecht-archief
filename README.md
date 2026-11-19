@@ -48,6 +48,16 @@ yt-dlp -f hd -o src/public/assets/video/oudegracht-1929.mp4 "https://www.faceboo
 Dit is de versie van Facebook (768×576, VP9, 3:03). Als HUA een betere versie aanlevert: bestand in `src/public/assets/video/` zetten en het pad + de lengte aanpassen via **CMS → Instellingen**.
 Is `video_file` leeg, dan draait er een nep-klok met lengte `video_duration`, zodat de app ook zonder film werkt.
 
+## Archiefbeelden
+
+De afbeeldingen uit ‘Bronmateriaal en info’ (beeldbank van HUA) staan ook **niet** in Git. Haal ze eenmalig op:
+
+```bash
+sh src/database/haal-archiefbeelden.sh
+```
+
+Ze komen in `src/public/uploads/` en zijn in `seed.sql` gekoppeld aan de punten (max. 3 per locatie, met omschrijving en catalogusnummer als bron).
+
 ## CMS
 
 http://localhost:8080/cms/ – maak eerst een beheerder aan (het wachtwoord wordt gevraagd en niet getoond):
@@ -80,6 +90,6 @@ Beveiliging (TO H6): wachtwoorden met `password_hash`, min. 12 tekens, blokkade 
 - [ ] Nog uit sprint 2: geluidseffecten (audio.js), eerste usability-test
 - [ ] Sprint 3: tests (WCAG, browsers, touch, beveiliging, duurtest), NL/EN, testrapport, demovideo
 
-De inhoud in `seed.sql` is **placeholder**. De brugposities komen uit OpenStreetMap; de tijden zijn gelijk verdeeld over de film en moeten nog worden afgestemd op wat er echt in beeld is (via CMS → Route en Punten). Teksten volgen uit ‘Bronmateriaal en info’ van HUA.
+De inhoud in `seed.sql` komt uit ‘Bronmateriaal en info’ van HUA: 8 locaties van net voor de Gaardbrug tot onder de Stadhuisbrug (1, 1a, 1b, 1c, 2, 2a, 3 en 5). De posities komen uit OpenStreetMap; de tijden zijn berekend op afstand langs de gracht en moeten nog worden afgestemd op de film (CMS → Route en Punten). Bij 1b en 1c gaf HUA geen tekst; die korte teksten zijn gebaseerd op de omschrijvingen in de beeldbank.
 
 **Huisstijl:** kleuren en stijl komen uit de CSS van hetutrechtsarchief.nl (rood `#d72f19`, petrolgroen `#247065`, blauw `#455cc7`, `#333` op `#f6f6f6`, strakke hoeken, harde schaduw). Het lettertype van HUA (Akzidenz-Grotesk Next) is een licentiefont; we vallen terug op Archivo. Controleer alles nog tegen `HUA_huisstijlmanual digitaal_2.pdf` (Notion).

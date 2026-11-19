@@ -8,6 +8,7 @@ export function createStopPopup({ points, onContinue }) {
   const figure = document.getElementById('popup-figure');
   const img = document.getElementById('popup-img');
   const caption = document.getElementById('popup-caption');
+  const thumbs = document.getElementById('popup-thumbs');
   const btn = document.getElementById('popup-continue');
   let timer = null;
 
@@ -16,17 +17,38 @@ export function createStopPopup({ points, onContinue }) {
     onContinue();
   });
 
+  function showMedia(media, index) {
+    const m = media[index];
+    img.src = m.url;
+    img.alt = m.alt_nl || '';
+    caption.textContent = [m.caption_nl, m.year, m.source].filter(Boolean).join(' · ');
+    [...thumbs.children].forEach((b, i) => b.setAttribute('aria-pressed', String(i === index)));
+  }
+
+  function renderThumbs(media) {
+    thumbs.replaceChildren(...(media.length > 1 ? media.map((m, i) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'stop-popup__thumb';
+      b.setAttribute('aria-label', `Afbeelding ${i + 1} van ${media.length}: ${m.alt_nl || ''}`);
+      const t = document.createElement('img');
+      t.src = m.url;
+      t.alt = '';
+      b.append(t);
+      b.addEventListener('click', () => showMedia(media, i));
+      return b;
+    }) : []));
+  }
+
   function show(p, { teaser = false } = {}) {
     clearTimeout(timer);
     num.textContent = String(points.indexOf(p) + 1);
     title.textContent = p.title_nl;
     text.textContent = p.text_nl;
-    const m = p.media[0];
-    figure.hidden = !m || teaser;
-    if (m) {
-      img.src = m.url;
-      img.alt = m.alt_nl || '';
-      caption.textContent = [m.caption_nl, m.year, m.source].filter(Boolean).join(' · ');
+    figure.hidden = !p.media.length || teaser;
+    if (p.media.length) {
+      renderThumbs(p.media);
+      showMedia(p.media, 0);
     }
     btn.hidden = teaser;
     el.classList.toggle('is-teaser', teaser);

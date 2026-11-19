@@ -1,0 +1,7 @@
+Options -Indexes
+
+<IfModule mod_headers.c>
+    <FilesMatch "\.(html|js|css|json|php)$">
+        Header set Cache-Control "no-cache"
+    </FilesMatch>
+</IfModule>
