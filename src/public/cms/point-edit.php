@@ -116,7 +116,7 @@ if ($point) {
     $media = $stmt->fetchAll();
 }
 $route = db()->query('SELECT video_time AS t, lat, lng FROM route_track ORDER BY video_time')->fetchAll();
-$sounds = ['' => 'Geen geluid', 'water' => 'Water', 'stad' => 'Stad', 'markt' => 'Markt', 'voetstappen' => 'Voetstappen'];
+$sounds = ['' => 'Geen geluid', 'water' => 'Water (plons)', 'voetstappen' => 'Voetstappen', 'paard' => 'Paardenhoeven', 'bel' => 'Handbel stadsomroeper', 'klok' => 'Klok'];
 
 cms_header($point ? 'Punt bewerken' : 'Nieuw punt', $user, 'points');
 ?>
@@ -297,4 +297,4 @@ cms_header($point ? 'Punt bewerken' : 'Nieuw punt', $user, 'points');
   </form>
 </section>
 <?php endif;
-cms_footer(['https://unpkg.com/leaflet@1.9.4/dist/leaflet.js', '../js/cms.js']);
+cms_footer(['../vendor/leaflet/leaflet.js', '../js/cms.js']);

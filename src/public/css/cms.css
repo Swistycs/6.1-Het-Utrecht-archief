@@ -7,7 +7,7 @@
   --hua-muted: #555;
   --hua-line: #e1e1e1;
   --hua-shadow: 0 3px 0 #33333326;
-  --font: akzidenz-grotesk-next, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font: akzidenz-grotesk-next, "Akzidenz-Grotesk", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 * { box-sizing: border-box; }
 body { margin: 0; font: 16px/1.5 var(--font); color: var(--hua-text); background: var(--hua-bg); }

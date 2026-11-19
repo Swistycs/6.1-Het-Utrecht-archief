@@ -21,7 +21,7 @@ header('X-Content-Type-Options: nosniff');
 header('X-Frame-Options: DENY');
 header('Referrer-Policy: same-origin');
 header("Content-Security-Policy: default-src 'self'; "
-    . "script-src 'self' https://unpkg.com; style-src 'self' https://unpkg.com; "
+    . "script-src 'self'; style-src 'self'; "
     . "img-src 'self' data: https://*.tile.openstreetmap.org; media-src 'self'; "
     . "form-action 'self'; frame-ancestors 'none'; base-uri 'self'");
 ini_set('display_errors', '0');

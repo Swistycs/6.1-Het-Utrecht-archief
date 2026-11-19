@@ -19,7 +19,7 @@ function cms_header(string $title, ?array $user = null, string $active = ''): vo
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex">
   <title><?= h($title) ?> – CMS Ontmoet de Oudegracht</title>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+  <link rel="stylesheet" href="../vendor/leaflet/leaflet.css">
   <link rel="stylesheet" href="../css/cms.css">
 </head>
 <body class="<?= $user ? 'has-nav' : 'is-login' ?>">
@@ -50,7 +50,7 @@ function cms_footer(array $scripts = []): void
     ?>
 </main>
 <?php foreach ($scripts as $src): ?>
-<script src="<?= h($src) ?>" <?= str_starts_with($src, 'http') ? 'crossorigin=""' : 'type="module"' ?>></script>
+<script src="<?= h($src) ?>"<?= str_ends_with($src, 'cms.js') ? ' type="module"' : '' ?>></script>
 <?php endforeach; ?>
 </body>
 </html>

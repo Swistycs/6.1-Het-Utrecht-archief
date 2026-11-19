@@ -101,4 +101,4 @@ cms_header('Route', $user, 'route');
   </section>
   <div class="form-actions"><button class="btn btn--primary">Route opslaan</button></div>
 </form>
-<?php cms_footer(['https://unpkg.com/leaflet@1.9.4/dist/leaflet.js', '../js/cms.js']);
+<?php cms_footer(['../vendor/leaflet/leaflet.js', '../js/cms.js']);

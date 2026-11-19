@@ -30,8 +30,8 @@ cp src/config/config.example.php src/config/config.php   # eenmalig
 docker compose up -d --build
 ```
 
-- Webapplicatie: http://localhost:8080
-- API: http://localhost:8080/api/content.php
+- Webapplicatie: http://localhost:8088
+- API: http://localhost:8088/api/content.php
 - MySQL: localhost:3307 (gebruiker `oudegracht` / `oudegracht_dev`)
 
 De database wordt bij de eerste start gevuld uit `src/database/schema.sql` en `seed.sql`.
@@ -58,9 +58,15 @@ sh src/database/haal-archiefbeelden.sh
 
 Ze komen in `src/public/uploads/` en zijn in `seed.sql` gekoppeld aan de punten (max. 3 per locatie, met omschrijving en catalogusnummer als bron).
 
+## Geluid en offline
+
+- **Geluid**: alle effecten worden in de browser gemaakt met de Web Audio API (geen geluidsbestanden, geen muziek): kabbelend water tijdens het varen en per stop een effect (`water`, `voetstappen`, `paard`, `bel`, `klok`, in te stellen per punt in het CMS). Knop rechtsboven zet het geluid uit; in de attract mode is het stil en na de idle-reset staat het weer aan.
+- **Offline**: `sw.js` (Service Worker) bewaart de app, de inhoud, de film, de archiefbeelden en bekeken kaarttegels. Met internet altijd de nieuwste versie (network first), zonder internet de laatst bekende. Werkt alleen via `localhost` of HTTPS.
+- Leaflet staat lokaal in `vendor/leaflet/`; er worden geen externe lettertypes geladen (Helvetica/Arial, alternatief voor Akzidenz Grotesk volgens de huisstijlmanual).
+
 ## CMS
 
-http://localhost:8080/cms/ – maak eerst een beheerder aan (het wachtwoord wordt gevraagd en niet getoond):
+http://localhost:8088/cms/ – maak eerst een beheerder aan (het wachtwoord wordt gevraagd en niet getoond):
 
 ```bash
 docker compose exec web php /var/www/database/create-admin.php "Jouw Naam" jij@voorbeeld.nl

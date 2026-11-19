@@ -3,6 +3,7 @@ import { createMap } from './map.js';
 import { createPoints } from './points.js';
 import { createIdle } from './idle.js';
 import { createStopPopup } from './popup.js';
+import { playEffect, startAmbient, stopAmbient, setSoundEnabled, isSoundEnabled, unlockAudio } from './audio.js';
 
 const API_URL = 'api/content.php';
 
@@ -31,6 +32,41 @@ function initDialogs(settings) {
   return { intro, colofon };
 }
 
+const TILE_COLORS = ['var(--hua-paars)', 'var(--hua-groenbeige)', 'var(--hua-beige-55)', 'var(--hua-paars-45)', 'var(--hua-green)', 'var(--hua-red)'];
+const TILE_PATTERN = 'pcpcp' + 'cpcpp';
+
+function buildMosaic(el, points) {
+  const photos = points.flatMap((p) => p.media.slice(0, 1).map((m) => m.url));
+  let pi = 0;
+  let ci = 0;
+  const tiles = [...TILE_PATTERN].map((kind, i) => {
+    const tile = document.createElement('span');
+    if (kind === 'p' && photos.length) {
+      tile.style.backgroundImage = `url("${photos[pi++ % photos.length]}")`;
+    } else {
+      tile.style.background = TILE_COLORS[ci++ % TILE_COLORS.length];
+    }
+    tile.style.animationDelay = `${i * 60}ms`;
+    return tile;
+  });
+  el.replaceChildren(...tiles);
+}
+
+async function registerOffline(settings, points) {
+  if (!('serviceWorker' in navigator)) return;
+  try {
+    await navigator.serviceWorker.register('sw.js');
+    const reg = await navigator.serviceWorker.ready;
+    const urls = [
+      settings.video_file,
+      ...points.flatMap((p) => p.media.map((m) => m.url)),
+    ].filter(Boolean).map((u) => new URL(u, location.href).href);
+    reg.active?.postMessage({ type: 'precache-media', urls });
+  } catch (err) {
+    console.warn('Offline werking niet beschikbaar', err);
+  }
+}
+
 async function init() {
   let content;
   try {
@@ -43,6 +79,7 @@ async function init() {
   const { settings, route, points } = content;
 
   const dialogs = initDialogs(settings);
+  registerOffline(settings, points);
 
   let player;
 
@@ -71,6 +108,7 @@ async function init() {
       } else {
         player.pause();
         popup.show(p);
+        playEffect(p.sound);
       }
     },
   });
@@ -82,7 +120,23 @@ async function init() {
       map.setTime(t);
       info.update(t);
     },
+    onState: (playing) => {
+      if (playing && !inAttract) startAmbient();
+      else stopAmbient();
+    },
   });
+
+  const btnSound = document.getElementById('btn-sound');
+  const showSound = () => {
+    const on = isSoundEnabled();
+    btnSound.setAttribute('aria-pressed', String(on));
+    btnSound.setAttribute('aria-label', on ? 'Geluid staat aan' : 'Geluid staat uit');
+  };
+  btnSound.addEventListener('click', () => {
+    setSoundEnabled(!isSoundEnabled());
+    showSound();
+  });
+  showSound();
 
   function sailTo(p) {
     player.pause();
@@ -97,10 +151,14 @@ async function init() {
   window.addEventListener('resize', () => map.invalidateSize());
 
   const attract = document.getElementById('attract');
+  buildMosaic(document.getElementById('attract-mosaic'), points);
   const idle = createIdle({ seconds: settings.idle_seconds, onIdle: enterAttract });
 
   function enterAttract() {
     inAttract = true;
+    stopAmbient();
+    setSoundEnabled(true);
+    showSound();
     popup.hide();
     idle.stop();
     [dialogs.intro, dialogs.colofon].forEach((d) => d.open && d.close());
@@ -113,6 +171,7 @@ async function init() {
 
   function leaveAttract() {
     inAttract = false;
+    unlockAudio();
     popup.hide();
     attract.hidden = true;
     player.setLoop(false);

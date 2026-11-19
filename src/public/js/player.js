@@ -20,7 +20,7 @@ export function formatTime(sec) {
   return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
 }
 
-export async function createPlayer({ settings, onTime }) {
+export async function createPlayer({ settings, onTime, onState }) {
   const videoEl = document.getElementById('film');
   const placeholder = document.getElementById('film-placeholder');
   const placeholderTime = document.getElementById('placeholder-time');
@@ -62,6 +62,7 @@ export async function createPlayer({ settings, onTime }) {
     const playing = !media.paused && !media.ended;
     playIcon.textContent = playing ? '❚❚' : '▶';
     btnPlay.setAttribute('aria-label', playing ? 'Pauzeren' : 'Afspelen');
+    onState?.(playing);
   }
 
   function play() { const r = media.play(); updatePlayButton(); return r; }

@@ -4,12 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Ontmoet de Oudegracht – Het Utrechts Archief</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;700&display=swap">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+  <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
   <link rel="stylesheet" href="css/style.css">
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin="" defer></script>
+  <script src="vendor/leaflet/leaflet.js" defer></script>
   <script src="js/app.js" type="module"></script>
 </head>
 <body>
@@ -19,7 +16,13 @@
       <span class="logo__text">Het Utrechts<br>Archief</span>
     </a>
     <h1 class="topbar__title">Ontmoet de Oudegracht <span class="topbar__year">1929</span></h1>
-    <button type="button" class="btn btn--icon" id="btn-info" aria-haspopup="dialog" aria-label="Over deze applicatie">i</button>
+    <div class="topbar__actions">
+      <button type="button" class="btn btn--icon btn--sound" id="btn-sound" aria-pressed="true" aria-label="Geluid">
+        <svg class="icon-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+        <svg class="icon-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><path d="M16 9l6 6M22 9l-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+      <button type="button" class="btn btn--icon" id="btn-info" aria-haspopup="dialog" aria-label="Over deze applicatie">i</button>
+    </div>
   </header>
 
   <main class="stage">
@@ -73,9 +76,11 @@
 
   <button type="button" class="attract" id="attract" hidden>
     <span class="attract__card">
-      <span class="attract__boat" aria-hidden="true">⛵</span>
-      <span class="attract__title">Tik om te varen over de Oudegracht van 1929</span>
-      <span class="attract__sub">Ontdek wat de filmcamera zag, bijna 100 jaar geleden</span>
+      <span class="attract__mosaic" id="attract-mosaic" aria-hidden="true"></span>
+      <span class="attract__text">
+        <span class="attract__title">Tik om te varen over de Oudegracht van 1929</span>
+        <span class="attract__sub">Ontdek wat de filmcamera zag, bijna 100 jaar geleden</span>
+      </span>
     </span>
   </button>
 
