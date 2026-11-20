@@ -43,8 +43,12 @@
             <p class="stop-popup__label">Je bent bij stop <span id="popup-num"></span></p>
             <h3 class="stop-popup__title" id="popup-title"></h3>
             <p class="stop-popup__text" id="popup-text"></p>
-            <button type="button" class="btn btn--play stop-popup__btn" id="popup-continue">Verder varen <span aria-hidden="true">▶</span></button>
+            <div class="stop-popup__actions">
+              <button type="button" class="btn btn--play stop-popup__btn" id="popup-continue">Verder varen <span aria-hidden="true">▶</span></button>
+              <button type="button" class="btn stop-popup__stay" id="popup-stay" hidden>Blijf hier</button>
+            </div>
           </div>
+          <div class="stop-popup__countdown" id="popup-countdown" aria-hidden="true" hidden><span></span></div>
         </div>
       </div>
       <p id="film-desc" class="visually-hidden">
@@ -94,7 +98,7 @@
       <li><span class="stop-num" aria-hidden="true">2</span> Tik op een stop om erheen te varen</li>
       <li><span class="stop-num" aria-hidden="true">3</span> Bekijk foto’s en verhalen uit het archief</li>
     </ol>
-    <form method="dialog"><button class="btn btn--play btn--wide">Start</button></form>
+    <form method="dialog"><button class="btn btn--play btn--wide" value="varen">Ga varen <span aria-hidden="true">▶</span></button></form>
   </dialog>
 
   <dialog id="dlg-colofon" class="dialog" aria-labelledby="colofon-title">

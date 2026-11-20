@@ -401,3 +401,22 @@ button { font: inherit; color: inherit; touch-action: manipulation; }
 .btn--sound[aria-pressed="false"] .icon-off { display: block; }
 .btn--sound[aria-pressed="false"] { color: var(--hua-muted); border-color: var(--hua-line); }
 .btn--icon { width: var(--touch); height: var(--touch); flex: none; }
+
+.stop-popup__actions { display: flex; flex-wrap: wrap; gap: 0.6em; margin-top: 0.5em; }
+.stop-popup__actions .stop-popup__btn { margin-top: 0; }
+.stop-popup__countdown {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 8px;
+  background: var(--hua-line);
+}
+.stop-popup__countdown > span {
+  display: block;
+  height: 100%;
+  width: 100%;
+  background: var(--hua-red);
+  transform-origin: left center;
+}
+@keyframes countdown { from { transform: scaleX(1); } to { transform: scaleX(0); } }

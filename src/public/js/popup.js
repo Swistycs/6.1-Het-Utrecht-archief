@@ -1,6 +1,6 @@
 const TEASER_MS = 5000;
 
-export function createStopPopup({ points, onContinue }) {
+export function createStopPopup({ points, onContinue, onStay, autoSeconds = 0 }) {
   const el = document.getElementById('stop-popup');
   const num = document.getElementById('popup-num');
   const title = document.getElementById('popup-title');
@@ -10,11 +10,43 @@ export function createStopPopup({ points, onContinue }) {
   const caption = document.getElementById('popup-caption');
   const thumbs = document.getElementById('popup-thumbs');
   const btn = document.getElementById('popup-continue');
+  const stay = document.getElementById('popup-stay');
+  const bar = document.getElementById('popup-countdown');
+  const autoMs = Math.max(0, Number(autoSeconds) || 0) * 1000;
   let timer = null;
+  let autoTimer = null;
+
+  function stopCountdown() {
+    clearTimeout(autoTimer);
+    autoTimer = null;
+    bar.hidden = true;
+    stay.hidden = true;
+  }
+
+  function startCountdown() {
+    stopCountdown();
+    if (!autoMs) return;
+    bar.hidden = false;
+    stay.hidden = false;
+    const fill = bar.firstElementChild;
+    fill.style.animation = 'none';
+    void fill.offsetWidth;
+    fill.style.animation = `countdown ${autoMs}ms linear forwards`;
+    autoTimer = setTimeout(() => {
+      hide();
+      onContinue();
+    }, autoMs);
+  }
 
   btn.addEventListener('click', () => {
     hide();
     onContinue();
+  });
+
+  stay.addEventListener('click', () => {
+    stopCountdown();
+    btn.focus();
+    onStay?.();
   });
 
   function showMedia(media, index) {
@@ -35,13 +67,17 @@ export function createStopPopup({ points, onContinue }) {
       t.src = m.url;
       t.alt = '';
       b.append(t);
-      b.addEventListener('click', () => showMedia(media, i));
+      b.addEventListener('click', () => {
+        showMedia(media, i);
+        if (autoTimer) startCountdown();
+      });
       return b;
     }) : []));
   }
 
   function show(p, { teaser = false } = {}) {
     clearTimeout(timer);
+    stopCountdown();
     num.textContent = String(points.indexOf(p) + 1);
     title.textContent = p.title_nl;
     text.textContent = p.text_nl;
@@ -57,12 +93,14 @@ export function createStopPopup({ points, onContinue }) {
     void el.offsetWidth;
     el.classList.add('is-in');
     if (teaser) timer = setTimeout(hide, TEASER_MS);
+    else startCountdown();
   }
 
   function hide() {
     clearTimeout(timer);
+    stopCountdown();
     el.hidden = true;
   }
 
-  return { show, hide, get open() { return !el.hidden; } };
+  return { show, hide, get open() { return !el.hidden; }, get counting() { return autoTimer !== null; } };
 }

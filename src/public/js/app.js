@@ -82,6 +82,7 @@ async function init() {
   registerOffline(settings, points);
 
   let player;
+  let idle;
 
   const map = createMap({
     route,
@@ -94,6 +95,8 @@ async function init() {
   const popup = createStopPopup({
     points,
     onContinue: () => player.play(),
+    onStay: () => idle?.start(),
+    autoSeconds: settings.stop_seconds ?? 20,
   });
 
   const info = createPoints({
@@ -123,6 +126,9 @@ async function init() {
     onState: (playing) => {
       if (playing && !inAttract) startAmbient();
       else stopAmbient();
+      if (inAttract || !idle) return;
+      if (playing || popup.counting) idle.stop();
+      else idle.start();
     },
   });
 
@@ -152,7 +158,7 @@ async function init() {
 
   const attract = document.getElementById('attract');
   buildMosaic(document.getElementById('attract-mosaic'), points);
-  const idle = createIdle({ seconds: settings.idle_seconds, onIdle: enterAttract });
+  idle = createIdle({ seconds: settings.idle_seconds, onIdle: enterAttract });
 
   function enterAttract() {
     inAttract = true;
@@ -162,9 +168,9 @@ async function init() {
     popup.hide();
     idle.stop();
     [dialogs.intro, dialogs.colofon].forEach((d) => d.open && d.close());
+    player.setLoop(false);
+    player.pause();
     player.seek(0);
-    player.setLoop(true);
-    player.play();
     attract.hidden = false;
     attract.focus();
   }
@@ -182,6 +188,11 @@ async function init() {
   }
 
   attract.addEventListener('click', leaveAttract);
+  dialogs.intro.addEventListener('close', () => {
+    if (inAttract) return;
+    player.seek(0);
+    player.play();
+  });
   enterAttract();
 }
 

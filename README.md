@@ -77,7 +77,7 @@ docker compose exec web php /var/www/database/create-admin.php "Jouw Naam" jij@v
 | Punten | Overzicht, nieuw punt, bewerken, (de)publiceren |
 | Punt bewerken | NL/EN-tekst, tijden met ‘Huidige videotijd gebruiken’, plek kiezen op de kaart, archiefbronnen uploaden (alt-tekst + bron verplicht), verwijderen met bevestiging |
 | Route | IJkpunten van de vaarroute (tijd in de film → plek op de kaart) |
-| Instellingen | Intro, colofon, idle-tijd, videobestand en lengte |
+| Instellingen | Intro, colofon, idle-tijd, tijd per stop (automatisch verder varen, 0 = wachten), videobestand en lengte |
 | Gebruikers | Alleen voor beheerders: redacteuren en beheerders toevoegen/verwijderen |
 
 Beveiliging (TO H6): wachtwoorden met `password_hash`, min. 12 tekens, blokkade na 5 mislukte pogingen (15 min), sessie verloopt na 30 min, CSRF-token op elk formulier, alle uitvoer via `htmlspecialchars`, uploads gecontroleerd op echte bestandsinhoud (max 5 MB, willekeurige naam, geen PHP in `/uploads`), PDO prepared statements, CSP-header.

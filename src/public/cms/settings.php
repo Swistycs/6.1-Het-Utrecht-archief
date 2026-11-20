@@ -9,6 +9,7 @@ $fields = [
     'colofon_nl'     => ['Colofon (Nederlands)', 'textarea', 1500],
     'colofon_en'     => ['Colofon (Engels)', 'textarea', 1500],
     'idle_seconds'   => ['Na hoeveel seconden zonder aanraking terug naar het startscherm?', 'number', 4],
+    'stop_seconds'   => ['Hoeveel seconden blijft de boot bij een stop staan? (0 = wachten tot de bezoeker op Verder varen tikt)', 'number', 4],
     'video_file'     => ['Videobestand (pad vanaf de webroot)', 'text', 255],
     'video_duration' => ['Lengte van de film (seconden)', 'text', 10],
 ];
@@ -28,6 +29,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     $idle = (int) $values['idle_seconds'];
     if ($idle < 15 || $idle > 3600) $errors['idle_seconds'] = 'Kies een tijd tussen 15 en 3600 seconden.';
+    $stop = $values['stop_seconds'];
+    if ($stop !== '' && (!ctype_digit($stop) || (int) $stop > 600)) $errors['stop_seconds'] = 'Kies een tijd tussen 0 en 600 seconden.';
+    if ($stop === '') $values['stop_seconds'] = '20';
+    if ($stop !== '' && (int) $stop > 0 && (int) $stop >= $idle) $errors['stop_seconds'] = 'De tijd bij een stop moet korter zijn dan de tijd tot het startscherm.';
     if (!is_numeric(str_replace(',', '.', $values['video_duration'])) || (float) str_replace(',', '.', $values['video_duration']) <= 0) {
         $errors['video_duration'] = 'Vul de lengte van de film in seconden in, bijvoorbeeld 182.8.';
     }

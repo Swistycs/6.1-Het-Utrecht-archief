@@ -4,6 +4,7 @@ INSERT INTO settings (setting_key, value) VALUES
 ('video_file', 'assets/video/oudegracht-1929.mp4'),
 ('video_duration', '182.8'),
 ('idle_seconds', '90'),
+('stop_seconds', '20'),
 ('intro_nl', 'Tussen de Gaardbrug en de Bezembrug ligt een bijzonder stuk van de Utrechtse Oudegracht. Je vindt er historische bruggen, oude handelshuizen, werfkelders en sporen van het middeleeuwse handelsleven. Een aantal plekken worden tijdens het boottochtje uitgelicht.'),
 ('intro_en', 'Between the Gaardbrug and the Bezembrug lies a special stretch of the Oudegracht in Utrecht, with historic bridges, old merchant houses, wharf cellars and traces of medieval trade.'),
 ('colofon_nl', 'Deze applicatie is gemaakt door De Werfwebbers (Levi Bhargava en Sem Stil) voor Het Utrechts Archief, bij de tentoonstelling ‘Ontmoet de Oudegracht’ (2027). Film en afbeeldingen: collectie Het Utrechts Archief.'),
