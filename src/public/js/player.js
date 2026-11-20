@@ -20,6 +20,17 @@ export function formatTime(sec) {
   return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
 }
 
+async function cachedVideoUrl(file) {
+  if (!('caches' in window)) return null;
+  try {
+    const cache = await caches.open('oudegracht-media');
+    const hit = await cache.match(new URL(file, location.href).href);
+    return hit ? URL.createObjectURL(await hit.blob()) : null;
+  } catch {
+    return null;
+  }
+}
+
 export async function createPlayer({ settings, onTime, onState }) {
   const videoEl = document.getElementById('film');
   const placeholder = document.getElementById('film-placeholder');
@@ -32,14 +43,33 @@ export async function createPlayer({ settings, onTime, onState }) {
   const timeCur = document.getElementById('time-current');
   const timeTot = document.getElementById('time-total');
   let media;
+  const loadSrc = (src) => new Promise((resolve) => {
+    const done = () => {
+      videoEl.removeEventListener('loadedmetadata', done);
+      videoEl.removeEventListener('error', done);
+      resolve(videoEl.readyState >= 1 && !videoEl.error);
+    };
+    videoEl.addEventListener('loadedmetadata', done);
+    videoEl.addEventListener('error', done);
+    videoEl.src = src;
+  });
   if (settings.video_file) {
-    videoEl.src = settings.video_file;
-    await new Promise((resolve) => {
-      if (videoEl.readyState >= 1) return resolve();
-      videoEl.addEventListener('loadedmetadata', resolve, { once: true });
-      videoEl.addEventListener('error', resolve, { once: true });
-    });
+    const cachedSrc = await cachedVideoUrl(settings.video_file);
+    const ok = cachedSrc && await loadSrc(cachedSrc);
+    if (!ok) await loadSrc(settings.video_file);
     media = videoEl;
+    let recovering = false;
+    videoEl.addEventListener('error', async () => {
+      if (recovering) return;
+      recovering = true;
+      const at = lastT > 0 ? lastT : 0;
+      const wasPlaying = !videoEl.paused;
+      if (await loadSrc(`${settings.video_file}?herstel=${Date.now()}`)) {
+        videoEl.currentTime = at;
+        if (wasPlaying) videoEl.play().catch(() => {});
+      }
+      recovering = false;
+    });
   }
   if (!media || !Number.isFinite(media.duration)) {
     media = createFakeClock(Number(settings.video_duration) || 240);
@@ -65,7 +95,11 @@ export async function createPlayer({ settings, onTime, onState }) {
     onState?.(playing);
   }
 
-  function play() { const r = media.play(); updatePlayButton(); return r; }
+  function play() {
+    const r = media.play();
+    updatePlayButton();
+    return r?.catch?.(() => {});
+  }
   function pause() { media.pause(); updatePlayButton(); }
   function toggle() { (media.paused || media.ended) ? play() : pause(); }
   function seek(t) {

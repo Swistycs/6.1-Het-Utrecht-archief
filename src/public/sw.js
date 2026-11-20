@@ -1,7 +1,7 @@
-const VERSION = 'oudegracht-v1';
+const VERSION = 'oudegracht-v2';
 const SHELL = `${VERSION}-shell`;
-const MEDIA = `${VERSION}-media`;
-const TILES = `${VERSION}-tiles`;
+const MEDIA = 'oudegracht-media';
+const TILES = 'oudegracht-tiles';
 
 const SHELL_FILES = [
   './',
@@ -77,29 +77,6 @@ async function cacheFirst(request, cacheName) {
   return res;
 }
 
-async function rangeFromCache(request) {
-  const cache = await caches.open(MEDIA);
-  const cached = await cache.match(request.url);
-  if (!cached) return fetch(request);
-  const blob = await cached.blob();
-  const size = blob.size;
-  const m = /bytes=(\d*)-(\d*)/.exec(request.headers.get('range') || '');
-  if (!m) return new Response(blob, { status: 200, headers: { 'Content-Type': cached.headers.get('Content-Type') || 'video/mp4', 'Content-Length': String(size), 'Accept-Ranges': 'bytes' } });
-  let start = m[1] === '' ? size - Number(m[2]) : Number(m[1]);
-  let end = m[1] !== '' && m[2] !== '' ? Number(m[2]) : size - 1;
-  start = Math.max(0, start);
-  end = Math.min(end, size - 1);
-  return new Response(blob.slice(start, end + 1), {
-    status: 206,
-    headers: {
-      'Content-Type': cached.headers.get('Content-Type') || 'video/mp4',
-      'Content-Range': `bytes ${start}-${end}/${size}`,
-      'Content-Length': String(end - start + 1),
-      'Accept-Ranges': 'bytes',
-    },
-  });
-}
-
 self.addEventListener('fetch', (event) => {
   const { request } = event;
   if (request.method !== 'GET') return;
@@ -111,10 +88,7 @@ self.addEventListener('fetch', (event) => {
   }
   if (url.origin !== self.location.origin || url.pathname.includes('/cms/')) return;
 
-  if (url.pathname.includes('/assets/video/')) {
-    event.respondWith(rangeFromCache(request));
-    return;
-  }
+  if (url.pathname.includes('/assets/video/')) return;
   if (url.pathname.includes('/uploads/')) {
     event.respondWith(cacheFirst(request, MEDIA));
     return;
