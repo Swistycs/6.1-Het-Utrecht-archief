@@ -103,8 +103,8 @@ button { font: inherit; color: inherit; touch-action: manipulation; }
   padding: var(--gap);
   min-height: 0;
 }
-.film { position: relative; flex: 1; min-width: 0; display: flex; }
-.block--map { width: clamp(300px, 21vw, 560px); flex: none; }
+.film { position: relative; flex: none; height: 100%; aspect-ratio: 4 / 3; max-width: calc(100% - 320px - var(--gap)); display: flex; }
+.block--map { flex: 1; min-width: 300px; }
 .block {
   display: flex;
   flex-direction: column;
@@ -133,15 +133,18 @@ button { font: inherit; color: inherit; touch-action: manipulation; }
 #map { position: absolute; inset: 0; background: #e5e5e5; }
 .leaflet-container { font-family: var(--font); }
 .map-point {
-  display: grid; place-items: center;
-  width: 100%; height: 100%;
+  display: block;
+  width: 18px;
+  height: 18px;
+  margin: 15px;
   border-radius: 50%;
   border: 3px solid var(--hua-white);
-  background: var(--hua-green); color: var(--hua-white);
-  font-weight: 700; font-size: var(--fs-small);
-  box-shadow: 0 2px 0 #33333340;
+  background: var(--hua-green);
+  box-shadow: 0 1px 3px #00000059;
+  transition: transform 0.2s;
 }
-.map-point.is-active { background: var(--hua-red); }
+.map-point.is-active { background: var(--hua-red); transform: scale(1.5); }
+.map-tiles { filter: grayscale(1) contrast(0.85) brightness(1.08); }
 .boat-marker { font-size: calc(var(--touch) * 0.5); line-height: 1; filter: drop-shadow(0 2px 2px rgb(0 0 0 / 0.45)); }
 
 .video-frame { position: relative; flex: 1; min-height: 0; background: #111; overflow: hidden; }
@@ -227,7 +230,7 @@ button { font: inherit; color: inherit; touch-action: manipulation; }
   flex: 1;
   min-width: 0;
   height: calc(var(--boat) + var(--dot) + 2.4em + 10px);
-  margin-inline: calc(var(--dot) / 2 + 8px);
+  margin-inline: calc(var(--dot) / 2 + 8px) calc(var(--dot) / 2 + 6em);
 }
 .vaarlijn__track, .vaarlijn__fill {
   position: absolute;
@@ -237,16 +240,6 @@ button { font: inherit; color: inherit; touch-action: manipulation; }
 }
 .vaarlijn__track { right: 0; background: var(--hua-line); }
 .vaarlijn__fill { width: var(--progress); background: var(--hua-red); }
-.vaarlijn__boat {
-  position: absolute;
-  left: var(--progress);
-  top: calc(var(--y) - var(--dot) * 0.6 - var(--boat) - 6px);
-  width: calc(var(--boat) * 1.1);
-  height: var(--boat);
-  transform: translateX(-50%);
-  pointer-events: none;
-  z-index: 3;
-}
 .vaarlijn:has(input:focus-visible) .vaarlijn__track { outline: 4px solid var(--hua-blue); outline-offset: 8px; }
 
 .vaarlijn input[type="range"] {
@@ -372,6 +365,7 @@ button { font: inherit; color: inherit; touch-action: manipulation; }
 @media (orientation: portrait), (max-width: 900px) {
   body { overflow: auto; grid-template-rows: auto auto auto; }
   .stage { flex-direction: column; }
+  .film { height: auto; width: 100%; max-width: none; }
   .video-frame { aspect-ratio: 4 / 3; flex: none; width: 100%; }
   .block--map { width: auto; order: 2; }
   .map-wrap { height: 50vh; flex: none; }

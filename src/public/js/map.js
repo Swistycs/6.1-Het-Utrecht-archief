@@ -14,7 +14,7 @@ export function positionAt(route, t) {
 }
 export function createMap({ route, points, onPointSelect }) {
   const map = L.map('map', {
-    zoomControl: true,
+    zoomControl: false,
     attributionControl: true,
     tap: true,
     keyboard: true,
@@ -22,18 +22,19 @@ export function createMap({ route, points, onPointSelect }) {
   });
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
+    className: 'map-tiles',
     attribution: '&copy; OpenStreetMap-bijdragers',
   }).addTo(map);
   const latlngs = route.map((r) => [r.lat, r.lng]);
   const line = L.polyline(latlngs, { color: '#247065', weight: 7, opacity: 0.9 }).addTo(map);
   map.fitBounds(line.getBounds(), { padding: [30, 30] });
 
-  const size = Math.max(40, Math.round(window.innerWidth * 0.022));
+  const size = 48;
   const markers = new Map();
   points.forEach((p, i) => {
     const icon = L.divIcon({
       className: '',
-      html: `<span class="map-point">${i + 1}</span>`,
+      html: '<span class="map-point"></span>',
       iconSize: [size, size],
       iconAnchor: [size / 2, size / 2],
     });
