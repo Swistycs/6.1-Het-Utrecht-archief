@@ -8,9 +8,10 @@ if (!$name || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
     exit(1);
 }
 fwrite(STDOUT, 'Wachtwoord (min. 12 tekens): ');
-system('stty -echo 2>/dev/null');
+$hide = PHP_OS_FAMILY !== 'Windows';
+if ($hide) system('stty -echo 2>/dev/null');
 $pass = trim((string) fgets(STDIN));
-system('stty echo 2>/dev/null');
+if ($hide) system('stty echo 2>/dev/null');
 fwrite(STDOUT, "\n");
 if (mb_strlen($pass) < 12) {
     fwrite(STDERR, "Het wachtwoord moet minstens 12 tekens lang zijn.\n");

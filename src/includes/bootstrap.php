@@ -11,7 +11,7 @@ $isHttps = ($_SERVER['HTTPS'] ?? '') === 'on' || ($_SERVER['HTTP_X_FORWARDED_PRO
 session_name('oudegracht_cms');
 session_set_cookie_params([
     'lifetime' => 0,
-    'path'     => '/cms/',
+    'path'     => rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/cms/x')), '/') . '/',
     'secure'   => $isHttps,
     'httponly' => true,
     'samesite' => 'Strict',

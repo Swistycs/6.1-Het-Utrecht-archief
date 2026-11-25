@@ -37,6 +37,96 @@ docker compose up -d --build
 De database wordt bij de eerste start gevuld uit `src/database/schema.sql` en `seed.sql`.
 Na een wijziging in die bestanden opnieuw opbouwen: `docker compose down -v && docker compose up -d`.
 
+## Lokaal draaien met XAMPP (Windows of Mac)
+
+Werk je liever met XAMPP dan met Docker, dan kan dat ook. Je hebt **XAMPP met PHP 8.2 of hoger** nodig.
+
+**1. Project op de goede plek zetten**
+
+Clone de repo in de map `htdocs` van XAMPP:
+
+```bash
+# Windows
+cd C:\xampp\htdocs
+git clone https://github.com/Swistycs/6.1-Het-Utrecht-archief.git oudegracht
+
+# Mac
+cd /Applications/XAMPP/htdocs
+git clone https://github.com/Swistycs/6.1-Het-Utrecht-archief.git oudegracht
+```
+
+**2. XAMPP starten**
+
+Start in het XAMPP Control Panel **Apache** en **MySQL**.
+
+**3. Database aanmaken**
+
+1. Ga naar http://localhost/phpmyadmin
+2. Klik op **Nieuw**, vul als naam `oudegracht` in en kies als collatie `utf8mb4_unicode_ci`. Klik op **Aanmaken**.
+3. Kies de database `oudegracht`, ga naar **Importeren** en importeer eerst `src/database/schema.sql`, daarna `src/database/seed.sql`.
+
+**4. Config aanmaken**
+
+Kopieer `src/config/config.example.php` naar `src/config/config.php` en zet daarin de standaardgegevens van XAMPP (gebruiker `root`, geen wachtwoord):
+
+```php
+<?php
+return [
+    'db' => [
+        'host' => 'localhost',
+        'name' => 'oudegracht',
+        'user' => 'root',
+        'pass' => '',
+    ],
+    'debug' => false,
+];
+```
+
+**5. Archiefbeelden en film ophalen**
+
+```bash
+# Windows (in de map C:\xampp\htdocs\oudegracht)
+C:\xampp\php\php.exe src\database\haal-archiefbeelden.php
+
+# Mac (in de map /Applications/XAMPP/htdocs/oudegracht)
+/Applications/XAMPP/bin/php src/database/haal-archiefbeelden.php
+```
+
+Voor de film heb je [yt-dlp](https://github.com/yt-dlp/yt-dlp) nodig (Windows: `winget install yt-dlp`, Mac: `brew install yt-dlp`):
+
+```bash
+yt-dlp -f hd -o src/public/assets/video/oudegracht-1929.mp4 "https://www.facebook.com/reel/668688640594552"
+```
+
+**6. Eigen beheerder aanmaken voor het CMS**
+
+```bash
+# Windows
+C:\xampp\php\php.exe src\database\create-admin.php "Jouw Naam" jij@voorbeeld.nl
+
+# Mac
+/Applications/XAMPP/bin/php src/database/create-admin.php "Jouw Naam" jij@voorbeeld.nl
+```
+
+Het script vraagt om een wachtwoord van minstens 12 tekens. Op Windows is het wachtwoord zichtbaar terwijl je typt.
+
+**7. Openen**
+
+- Webapplicatie: http://localhost/oudegracht/src/public/
+- CMS: http://localhost/oudegracht/src/public/cms/
+
+**Werkt het niet?**
+
+| Probleem | Oplossing |
+|---|---|
+| ‘De inhoud kon niet worden geladen’ | Klopt `config.php`? Zijn `schema.sql` én `seed.sql` geïmporteerd? |
+| Uploaden in het CMS geeft een fout | Zet in `php.ini` (XAMPP Control Panel → Apache → Config) de regel `extension=fileinfo` aan (zonder `;` ervoor) en herstart Apache. Doe hetzelfde voor `extension=pdo_mysql` als de database niet werkt. |
+| Apache start niet | Poort 80 is bezet (bijvoorbeeld door Skype of IIS). Zet Apache in XAMPP op een andere poort, bijvoorbeeld 8080, en open dan http://localhost:8080/oudegracht/src/public/ |
+| Archiefbeelden of film ontbreken | Stap 5 opnieuw doen; ze staan niet in Git. |
+| Oude versie blijft zichtbaar | Herlaad met Ctrl+Shift+R (Mac: Cmd+Shift+R); de Service Worker bewaart een kopie. |
+
+Let op: in deze opzet staat de hele repo in `htdocs`. Dat is prima om lokaal te werken, maar op een echte server moet alleen `src/public` de webroot zijn (zie hieronder).
+
 ## De film
 
 De film staat **niet** in Git (te groot, en het is materiaal van HUA). Haal hem eenmalig op met [yt-dlp](https://github.com/yt-dlp/yt-dlp) (`brew install yt-dlp`):
@@ -53,8 +143,10 @@ Is `video_file` leeg, dan draait er een nep-klok met lengte `video_duration`, zo
 De afbeeldingen uit ‘Bronmateriaal en info’ (beeldbank van HUA) staan ook **niet** in Git. Haal ze eenmalig op:
 
 ```bash
-sh src/database/haal-archiefbeelden.sh
+docker compose exec web php /var/www/database/haal-archiefbeelden.php
 ```
+
+(Met XAMPP: zie hieronder.)
 
 Ze komen in `src/public/uploads/` en zijn in `seed.sql` gekoppeld aan de punten (max. 3 per locatie, met omschrijving en catalogusnummer als bron).
 
