@@ -43,7 +43,7 @@ Werk je liever met XAMPP dan met Docker, dan kan dat ook. Je hebt **XAMPP met PH
 
 **1. Project op de goede plek zetten**
 
-Clone de repo in de map `htdocs` van XAMPP:
+Clone de repo in de map `htdocs` van XAMPP. Hieronder heet de map `oudegracht`; gebruik je een andere naam (bijvoorbeeld `6.1-Het-Utrecht-archief`), vervang `oudegracht` dan overal in de adressen hieronder door die naam.
 
 ```bash
 # Windows
@@ -92,7 +92,14 @@ C:\xampp\php\php.exe src\database\haal-archiefbeelden.php
 /Applications/XAMPP/bin/php src/database/haal-archiefbeelden.php
 ```
 
-Voor de film heb je [yt-dlp](https://github.com/yt-dlp/yt-dlp) nodig (Windows: `winget install yt-dlp`, Mac: `brew install yt-dlp`):
+Voor de film heb je [yt-dlp](https://github.com/yt-dlp/yt-dlp) nodig.
+
+- Windows: `winget install --id yt-dlp.yt-dlp -e --source winget` en daarna **PowerShell sluiten en opnieuw openen** (anders herkent hij `yt-dlp` nog niet). Alleen `winget install yt-dlp` werkt niet: winget vindt dan twee pakketten en installeert niets.
+- Mac: `brew install yt-dlp`
+
+Makkelijker: vraag een teamlid die de film al heeft om `oudegracht-1929.mp4` te sturen en zet hem in `src/public/assets/video/`.
+
+Film ophalen (in de projectmap):
 
 ```bash
 yt-dlp -f hd -o src/public/assets/video/oudegracht-1929.mp4 "https://www.facebook.com/reel/668688640594552"
