@@ -29,6 +29,7 @@
     <section class="film" aria-label="Film uit 1929">
       <div class="video-frame">
         <video id="film" playsinline muted preload="auto" aria-describedby="film-desc"></video>
+        <p class="film-credit">Filmopname 1929 · Collectie Het Utrechts Archief</p>
         <div id="film-placeholder" class="film-placeholder" hidden>
           <p>De film uit 1929 volgt nog</p>
           <p class="film-placeholder__time" id="placeholder-time">0:00</p>
@@ -60,7 +61,10 @@
     <section class="block block--map" aria-labelledby="map-heading">
       <h2 class="block__label" id="map-heading">Vaarroute</h2>
       <p class="map-hint">Tik op een punt om erheen te varen</p>
-      <div class="map-wrap"><div id="map"></div></div>
+      <div class="map-wrap">
+        <div id="map"></div>
+        <svg class="map-north" viewBox="0 0 32 46" role="img" aria-label="Noord is boven"><path d="M16 2 L25 22 L16 17 L7 22 Z"/><text x="16" y="42" text-anchor="middle">N</text></svg>
+      </div>
     </section>
   </main>
 
