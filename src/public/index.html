@@ -113,18 +113,24 @@
     <h2 id="intro-title">Welkom aan boord!</h2>
     <p id="intro-text"></p>
     <ol class="steps">
-      <li><span class="stop-num" aria-hidden="true">1</span> Kies hieronder hoe je wilt varen</li>
+      <li><span class="stop-num" aria-hidden="true">1</span> Druk op <strong>Ga varen</strong> en vaar mee</li>
       <li><span class="stop-num" aria-hidden="true">2</span> Tik op een nummer op de kaart om erheen te varen</li>
       <li><span class="stop-num" aria-hidden="true">3</span> Bekijk foto’s en verhalen uit het archief</li>
     </ol>
+    <form method="dialog"><button class="btn btn--play btn--wide" value="varen">Ga varen <span aria-hidden="true">▶</span></button></form>
+  </dialog>
+
+  <dialog id="dlg-start" class="dialog dialog--start" aria-labelledby="start-title">
+    <p class="block__label">Ontmoet de Oudegracht</p>
+    <h2 id="start-title">Hoe moet de vaartocht draaien?</h2>
     <form method="dialog" class="start-choice">
       <button class="start-choice__btn start-choice__btn--auto" value="auto">
         <span class="start-choice__title"><span aria-hidden="true">▶</span> Automatisch varen</span>
-        <span class="start-choice__sub" id="start-auto-sub">De boot vaart vanzelf en blijft bij elke stop even liggen</span>
+        <span class="start-choice__sub" id="start-auto-sub">De film speelt steeds opnieuw af en blijft bij elke stop even liggen</span>
       </button>
       <button class="start-choice__btn" value="zelf">
         <span class="start-choice__title">Zelf varen</span>
-        <span class="start-choice__sub">De boot wacht bij elke stop tot jij verder vaart</span>
+        <span class="start-choice__sub">Bezoekers starten zelf de vaartocht en tikken door de stops</span>
       </button>
     </form>
   </dialog>

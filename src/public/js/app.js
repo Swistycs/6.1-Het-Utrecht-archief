@@ -146,10 +146,11 @@ async function init() {
   const setAuto = (on) => popup.setAuto(on);
   const autoSub = document.getElementById('start-auto-sub');
   if (popup.autoAvailable) {
-    autoSub.textContent = `De boot vaart vanzelf en blijft bij elke stop ${Number(settings.stop_seconds ?? 20)} seconden liggen`;
+    autoSub.textContent = `De film speelt steeds opnieuw af en blijft bij elke stop ${Number(settings.stop_seconds ?? 20)} seconden liggen`;
   } else {
     document.querySelector('.start-choice__btn--auto').hidden = true;
   }
+  let mode = 'zelf';
 
   function sailTo(p) {
     player.pause();
@@ -165,14 +166,32 @@ async function init() {
 
   const attract = document.getElementById('attract');
   buildMosaic(document.getElementById('attract-mosaic'), points);
-  idle = createIdle({ seconds: settings.idle_seconds, onIdle: enterAttract });
+  idle = createIdle({ seconds: settings.idle_seconds, onIdle: () => (mode === 'auto' ? resumeAuto() : enterAttract()) });
+
+  function resumeAuto() {
+    [dialogs.intro, dialogs.colofon].forEach((d) => d.open && d.close());
+    setSoundEnabled(true);
+    showSound();
+    popup.hide();
+    player.play();
+  }
+
+  function startAuto() {
+    mode = 'auto';
+    inAttract = false;
+    unlockAudio();
+    attract.hidden = true;
+    setAuto(true);
+    player.setLoop(true);
+    player.seek(0);
+    player.play();
+  }
 
   function enterAttract() {
     inAttract = true;
     stopAmbient();
     setSoundEnabled(true);
     showSound();
-    setAuto(true);
     popup.hide();
     idle.stop();
     [dialogs.intro, dialogs.colofon].forEach((d) => d.open && d.close());
@@ -188,7 +207,6 @@ async function init() {
     unlockAudio();
     popup.hide();
     attract.hidden = true;
-    player.setLoop(false);
     player.pause();
     player.seek(0);
     dialogs.intro.showModal();
@@ -197,12 +215,26 @@ async function init() {
 
   attract.addEventListener('click', leaveAttract);
   dialogs.intro.addEventListener('close', () => {
-    if (inAttract) return;
-    setAuto(dialogs.intro.returnValue !== 'zelf');
+    if (inAttract || mode !== 'zelf') return;
     player.seek(0);
     player.play();
   });
-  enterAttract();
+
+  const startDlg = document.getElementById('dlg-start');
+  startDlg.addEventListener('cancel', (e) => e.preventDefault());
+  startDlg.addEventListener('close', () => {
+    if (startDlg.returnValue === 'auto' && popup.autoAvailable) {
+      startAuto();
+    } else {
+      mode = 'zelf';
+      setAuto(false);
+      enterAttract();
+    }
+  });
+  inAttract = true;
+  player.pause();
+  player.seek(0);
+  startDlg.showModal();
 }
 
 init();

@@ -157,6 +157,13 @@ docker compose exec web php /var/www/database/haal-archiefbeelden.php
 
 Ze komen in `src/public/uploads/` en zijn in `seed.sql` gekoppeld aan de punten (max. 3 per locatie, met omschrijving en catalogusnummer als bron).
 
+## Twee manieren van draaien
+
+Bij het opstarten (pagina openen of herladen) kies je één keer hoe de app draait:
+
+- **Automatisch varen**: de film speelt eindeloos in een lus, blijft bij elke stop even liggen (tijd per stop instelbaar in het CMS) en begint aan het eind vanzelf opnieuw. Geen startscherm. Pauzeert een bezoeker en loopt hij weg, dan speelt de film na de idle-tijd vanzelf verder.
+- **Zelf varen**: startscherm ‘Tik om te varen’, daarna de intro met ‘Ga varen’. De boot wacht bij elke stop op ‘Verder varen’. Na de idle-tijd zonder aanraking terug naar het startscherm.
+
 ## Geluid en offline
 
 - **Geluid**: alle effecten worden in de browser gemaakt met de Web Audio API (geen geluidsbestanden, geen muziek): kabbelend water tijdens het varen en per stop een effect (`water`, `voetstappen`, `paard`, `bel`, `klok`, in te stellen per punt in het CMS). Knop rechtsboven zet het geluid uit; in de attract mode is het stil en na de idle-reset staat het weer aan.
