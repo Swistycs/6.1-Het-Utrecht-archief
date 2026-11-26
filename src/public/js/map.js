@@ -12,6 +12,8 @@ export function positionAt(route, t) {
   const f = (t - a.t) / (b.t - a.t);
   return [a.lat + (b.lat - a.lat) * f, a.lng + (b.lng - a.lng) * f];
 }
+const KAART_GEBIED = [[52.0878, 5.1150], [52.0927, 5.1255]];
+
 export function createMap({ route, points, onPointSelect }) {
   const map = L.map('map', {
     zoomControl: false,
@@ -19,14 +21,21 @@ export function createMap({ route, points, onPointSelect }) {
     tap: true,
     keyboard: true,
     zoomSnap: 0.25,
+    minZoom: 16,
+    maxBounds: KAART_GEBIED,
+    maxBoundsViscosity: 1,
   });
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
+  L.tileLayer('assets/kaart/{z}/{x}/{y}.jpg', {
+    minZoom: 16,
+    maxZoom: 21,
+    maxNativeZoom: 20,
+    bounds: KAART_GEBIED,
     className: 'map-tiles',
-    attribution: '&copy; OpenStreetMap-bijdragers',
+    attribution: 'Luchtfoto: Beeldmateriaal Nederland / PDOK (CC BY 4.0)',
   }).addTo(map);
   const latlngs = route.map((r) => [r.lat, r.lng]);
-  const line = L.polyline(latlngs, { color: '#247065', weight: 7, opacity: 0.9 }).addTo(map);
+  L.polyline(latlngs, { color: '#ffffff', weight: 11, opacity: 0.85, lineCap: 'round' }).addTo(map);
+  const line = L.polyline(latlngs, { color: '#247065', weight: 6, opacity: 1, lineCap: 'round' }).addTo(map);
   const fit = () => map.fitBounds(line.getBounds(), { padding: [36, 36] });
   fit();
 

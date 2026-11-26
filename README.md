@@ -161,6 +161,7 @@ Ze komen in `src/public/uploads/` en zijn in `seed.sql` gekoppeld aan de punten 
 
 - **Geluid**: alle effecten worden in de browser gemaakt met de Web Audio API (geen geluidsbestanden, geen muziek): kabbelend water tijdens het varen en per stop een effect (`water`, `voetstappen`, `paard`, `bel`, `klok`, in te stellen per punt in het CMS). Knop rechtsboven zet het geluid uit; in de attract mode is het stil en na de idle-reset staat het weer aan.
 - **Offline**: `sw.js` (Service Worker) bewaart de app, de inhoud, de film, de archiefbeelden en bekeken kaarttegels. Met internet altijd de nieuwste versie (network first), zonder internet de laatst bekende. Werkt alleen via `localhost` of HTTPS.
+- **Kaart**: luchtfoto van PDOK (Beeldmateriaal Nederland, CC BY 4.0), eenmalig gedownload voor het gebied rond de route en lokaal opgeslagen in `src/public/assets/kaart/` (zoom 16–20, ca. 13 MB). Geen externe kaartserver nodig, dus geen blokkades en ook offline bruikbaar.
 - Leaflet staat lokaal in `vendor/leaflet/`; er worden geen externe lettertypes geladen (Helvetica/Arial, alternatief voor Akzidenz Grotesk volgens de huisstijlmanual).
 
 ## CMS

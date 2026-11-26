@@ -15,17 +15,21 @@ if (mapEl && window.L) {
   const route = JSON.parse(mapEl.dataset.route || '[]').map((r) => [Number(r.lat), Number(r.lng)]);
 
   const map = L.map(mapEl);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    attribution: '&copy; OpenStreetMap-bijdragers',
+  L.tileLayer('../assets/kaart/{z}/{x}/{y}.jpg', {
+    minZoom: 16,
+    maxZoom: 21,
+    maxNativeZoom: 20,
+    bounds: [[52.0878, 5.1150], [52.0927, 5.1255]],
+    attribution: 'Luchtfoto: Beeldmateriaal Nederland / PDOK (CC BY 4.0)',
   }).addTo(map);
 
   if (route.length > 1) {
-    const line = L.polyline(route, { color: '#247065', weight: 6 }).addTo(map);
-    route.forEach((p) => L.circleMarker(p, { radius: 5, color: '#247065', fillOpacity: 1 }).addTo(map));
+    L.polyline(route, { color: '#ffffff', weight: 10, opacity: 0.85 }).addTo(map);
+    const line = L.polyline(route, { color: '#247065', weight: 5 }).addTo(map);
+    route.forEach((p) => L.circleMarker(p, { radius: 6, color: '#ffffff', weight: 2, fillColor: '#247065', fillOpacity: 1 }).addTo(map));
     map.fitBounds(line.getBounds(), { padding: [30, 30] });
   } else {
-    map.setView([52.0905, 5.1205], 17);
+    map.setView([52.0903, 5.1203], 18);
   }
 
   let marker = null;

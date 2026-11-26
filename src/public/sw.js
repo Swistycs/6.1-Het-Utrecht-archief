@@ -1,4 +1,4 @@
-const VERSION = 'oudegracht-v2';
+const VERSION = 'oudegracht-v3';
 const SHELL = `${VERSION}-shell`;
 const MEDIA = 'oudegracht-media';
 const TILES = 'oudegracht-tiles';
@@ -82,11 +82,11 @@ self.addEventListener('fetch', (event) => {
   if (request.method !== 'GET') return;
   const url = new URL(request.url);
 
-  if (url.hostname.endsWith('tile.openstreetmap.org')) {
+  if (url.origin !== self.location.origin || url.pathname.includes('/cms/')) return;
+  if (url.pathname.includes('/assets/kaart/')) {
     event.respondWith(cacheFirst(request, TILES));
     return;
   }
-  if (url.origin !== self.location.origin || url.pathname.includes('/cms/')) return;
 
   if (url.pathname.includes('/assets/video/')) return;
   if (url.pathname.includes('/uploads/')) {
