@@ -147,7 +147,7 @@ async function init() {
   let autoOn = true;
   const showAuto = () => {
     btnAuto.setAttribute('aria-pressed', String(autoOn));
-    document.getElementById('auto-label').textContent = autoOn ? 'Automatisch aan' : 'Automatisch uit';
+    document.getElementById('auto-label').textContent = autoOn ? 'Autoplay aan' : 'Autoplay uit';
   };
   const setAuto = (on) => {
     autoOn = on;
