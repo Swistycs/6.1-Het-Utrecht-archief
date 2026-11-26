@@ -143,20 +143,13 @@ async function init() {
   });
   showSound();
 
-  const btnAuto = document.getElementById('btn-auto');
-  let autoOn = true;
-  const showAuto = () => {
-    btnAuto.setAttribute('aria-pressed', String(autoOn));
-    document.getElementById('auto-label').textContent = autoOn ? 'Autoplay aan' : 'Autoplay uit';
-  };
-  const setAuto = (on) => {
-    autoOn = on;
-    popup.setAuto(on);
-    showAuto();
-  };
-  btnAuto.hidden = !popup.autoAvailable;
-  btnAuto.addEventListener('click', () => setAuto(!autoOn));
-  showAuto();
+  const setAuto = (on) => popup.setAuto(on);
+  const autoSub = document.getElementById('start-auto-sub');
+  if (popup.autoAvailable) {
+    autoSub.textContent = `De boot vaart vanzelf en blijft bij elke stop ${Number(settings.stop_seconds ?? 20)} seconden liggen`;
+  } else {
+    document.querySelector('.start-choice__btn--auto').hidden = true;
+  }
 
   function sailTo(p) {
     player.pause();
@@ -205,6 +198,7 @@ async function init() {
   attract.addEventListener('click', leaveAttract);
   dialogs.intro.addEventListener('close', () => {
     if (inAttract) return;
+    setAuto(dialogs.intro.returnValue !== 'zelf');
     player.seek(0);
     player.play();
   });
