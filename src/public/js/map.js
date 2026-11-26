@@ -49,6 +49,7 @@ export function createMap({ route, points, onPointSelect }) {
     maxBounds: KAART_GEBIED,
     maxBoundsViscosity: 1,
   });
+  map.attributionControl.setPrefix(false);
   L.tileLayer('assets/kaart/{z}/{x}/{y}.jpg', {
     minZoom: 16,
     maxZoom: 21,

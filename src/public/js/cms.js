@@ -15,6 +15,7 @@ if (mapEl && window.L) {
   const route = JSON.parse(mapEl.dataset.route || '[]').map((r) => [Number(r.lat), Number(r.lng)]);
 
   const map = L.map(mapEl);
+  map.attributionControl.setPrefix(false);
   L.tileLayer('../assets/kaart/{z}/{x}/{y}.jpg', {
     minZoom: 16,
     maxZoom: 21,
