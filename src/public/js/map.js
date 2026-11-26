@@ -41,7 +41,7 @@ const KAART_GEBIED = [[52.0878, 5.1150], [52.0927, 5.1255]];
 export function createMap({ route, points, onPointSelect }) {
   const map = L.map('map', {
     zoomControl: false,
-    attributionControl: true,
+    attributionControl: false,
     tap: true,
     keyboard: true,
     zoomSnap: 0.25,
@@ -49,7 +49,6 @@ export function createMap({ route, points, onPointSelect }) {
     maxBounds: KAART_GEBIED,
     maxBoundsViscosity: 1,
   });
-  map.attributionControl.setPrefix(false);
   L.tileLayer('assets/kaart/{z}/{x}/{y}.jpg', {
     minZoom: 16,
     maxZoom: 21,
