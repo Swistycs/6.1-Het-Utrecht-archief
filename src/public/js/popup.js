@@ -15,6 +15,7 @@ export function createStopPopup({ points, onContinue, onStay, autoSeconds = 0 })
   const autoMs = Math.max(0, Number(autoSeconds) || 0) * 1000;
   let timer = null;
   let autoTimer = null;
+  let autoOn = true;
 
   function stopCountdown() {
     clearTimeout(autoTimer);
@@ -25,7 +26,7 @@ export function createStopPopup({ points, onContinue, onStay, autoSeconds = 0 })
 
   function startCountdown() {
     stopCountdown();
-    if (!autoMs) return;
+    if (!autoMs || !autoOn) return;
     bar.hidden = false;
     stay.hidden = false;
     const fill = bar.firstElementChild;
@@ -102,5 +103,21 @@ export function createStopPopup({ points, onContinue, onStay, autoSeconds = 0 })
     el.hidden = true;
   }
 
-  return { show, hide, get open() { return !el.hidden; }, get counting() { return autoTimer !== null; } };
+  function setAuto(on) {
+    autoOn = Boolean(on);
+    if (!autoOn) {
+      if (autoTimer) { stopCountdown(); onStay?.(); }
+    } else if (!el.hidden && !el.classList.contains('is-teaser')) {
+      startCountdown();
+    }
+  }
+
+  return {
+    show,
+    hide,
+    setAuto,
+    get autoAvailable() { return autoMs > 0; },
+    get open() { return !el.hidden; },
+    get counting() { return autoTimer !== null; },
+  };
 }

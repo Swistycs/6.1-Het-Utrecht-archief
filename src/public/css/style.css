@@ -439,7 +439,7 @@ button { font: inherit; color: inherit; touch-action: manipulation; }
 .tbtn:active { background: var(--hua-bg); }
 .btn--sound .icon-off, .btn--sound[aria-pressed="false"] .icon-on { display: none; }
 .btn--sound[aria-pressed="false"] .icon-off { display: block; }
-.btn--sound[aria-pressed="false"] { color: var(--hua-muted); }
+.btn--sound[aria-pressed="false"], .btn--auto[aria-pressed="false"] { color: var(--hua-muted); }
 
 .map-tag {
   position: absolute;

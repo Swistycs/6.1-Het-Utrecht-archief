@@ -143,6 +143,21 @@ async function init() {
   });
   showSound();
 
+  const btnAuto = document.getElementById('btn-auto');
+  let autoOn = true;
+  const showAuto = () => {
+    btnAuto.setAttribute('aria-pressed', String(autoOn));
+    document.getElementById('auto-label').textContent = autoOn ? 'Automatisch aan' : 'Automatisch uit';
+  };
+  const setAuto = (on) => {
+    autoOn = on;
+    popup.setAuto(on);
+    showAuto();
+  };
+  btnAuto.hidden = !popup.autoAvailable;
+  btnAuto.addEventListener('click', () => setAuto(!autoOn));
+  showAuto();
+
   function sailTo(p) {
     player.pause();
     player.seek(p.time_start);
@@ -164,6 +179,7 @@ async function init() {
     stopAmbient();
     setSoundEnabled(true);
     showSound();
+    setAuto(true);
     popup.hide();
     idle.stop();
     [dialogs.intro, dialogs.colofon].forEach((d) => d.open && d.close());
