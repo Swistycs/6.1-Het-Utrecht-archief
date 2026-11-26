@@ -27,14 +27,15 @@ export function createMap({ route, points, onPointSelect }) {
   }).addTo(map);
   const latlngs = route.map((r) => [r.lat, r.lng]);
   const line = L.polyline(latlngs, { color: '#247065', weight: 7, opacity: 0.9 }).addTo(map);
-  map.fitBounds(line.getBounds(), { padding: [30, 30] });
+  const fit = () => map.fitBounds(line.getBounds(), { padding: [36, 36] });
+  fit();
 
-  const size = 48;
+  const size = 44;
   const markers = new Map();
   points.forEach((p, i) => {
     const icon = L.divIcon({
       className: '',
-      html: '<span class="map-point"></span>',
+      html: `<span class="map-point">${i + 1}</span>`,
       iconSize: [size, size],
       iconAnchor: [size / 2, size / 2],
     });
@@ -50,7 +51,7 @@ export function createMap({ route, points, onPointSelect }) {
     icon: L.divIcon({ className: 'boat-marker', html: '<span aria-hidden="true">⛵</span>', iconSize: [40, 40], iconAnchor: [20, 20] }),
     keyboard: false,
     interactive: false,
-    zIndexOffset: 1000,
+    zIndexOffset: 400,
   }).addTo(map);
   let lastPos = null;
   return {
@@ -60,16 +61,16 @@ export function createMap({ route, points, onPointSelect }) {
       if (lastPos && pos[0] === lastPos[0] && pos[1] === lastPos[1]) return;
       lastPos = pos;
       boat.setLatLng(pos);
-      if (!map.getBounds().pad(-0.25).contains(pos)) {
-        map.panTo(pos, { animate: !matchMedia('(prefers-reduced-motion: reduce)').matches });
-      }
+      points.forEach((p) => {
+        markers.get(p.id)?.getElement()?.querySelector('.map-point')?.classList.toggle('is-done', p.time_start <= t);
+      });
     },
     setActive(id) {
       markers.forEach((m, pid) => {
         m.getElement()?.querySelector('.map-point')?.classList.toggle('is-active', pid === id);
-        m.setZIndexOffset(pid === id ? 500 : 0);
+        m.setZIndexOffset(pid === id ? 1000 : 0);
       });
     },
-    invalidateSize() { map.invalidateSize(); },
+    invalidateSize() { map.invalidateSize(); fit(); },
   };
 }

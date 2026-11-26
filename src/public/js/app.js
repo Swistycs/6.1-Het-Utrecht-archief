@@ -102,7 +102,6 @@ async function init() {
   const info = createPoints({
     points,
     duration: Number(settings.video_duration) || 1,
-    onSelect: (p) => sailTo(p),
     onChange: (p) => {
       map.setActive(p ? p.id : null);
       if (!p || !player) return;
