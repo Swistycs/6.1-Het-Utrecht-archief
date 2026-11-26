@@ -135,7 +135,7 @@ async function init() {
   const showSound = () => {
     const on = isSoundEnabled();
     btnSound.setAttribute('aria-pressed', String(on));
-    btnSound.setAttribute('aria-label', on ? 'Geluid staat aan' : 'Geluid staat uit');
+    document.getElementById('sound-label').textContent = on ? 'Geluid aan' : 'Geluid uit';
   };
   btnSound.addEventListener('click', () => {
     setSoundEnabled(!isSoundEnabled());

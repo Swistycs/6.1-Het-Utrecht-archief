@@ -10,6 +10,9 @@ export function createPoints({ points, duration, onChange }) {
   const ticks = document.getElementById('stops');
   const statusLabel = document.getElementById('status-label');
   const statusName = document.getElementById('status-name');
+  const statusNum = document.getElementById('status-num');
+  document.getElementById('route-start').textContent = points[0]?.title_nl || '';
+  document.getElementById('route-end').textContent = points[points.length - 1]?.title_nl || '';
   const live = document.getElementById('live');
 
   const items = points.map((p) => {
@@ -34,6 +37,10 @@ export function createPoints({ points, duration, onChange }) {
     const key = active ? `nu-${active.id}` : next ? `volgende-${next.id}` : 'einde';
     if (key === statusKey) return;
     statusKey = key;
+    const shown = active || next;
+    statusNum.textContent = shown ? String(points.indexOf(shown) + 1) : '';
+    statusNum.classList.toggle('is-current', Boolean(active));
+    statusNum.hidden = !shown;
     if (active) {
       statusLabel.textContent = `Stop ${points.indexOf(active) + 1} van ${points.length}`;
       statusName.textContent = active.title_nl;

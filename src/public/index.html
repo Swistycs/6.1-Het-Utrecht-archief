@@ -13,16 +13,23 @@
   <header class="topbar">
     <a class="logo" href="./" aria-label="Het Utrechts Archief – opnieuw beginnen">
       <img class="logo__mark" src="assets/img/logo-hua.svg" alt="" width="60" height="60">
-      <span class="logo__text">Het Utrechts<br>Archief</span>
     </a>
-    <h1 class="topbar__title">Ontmoet de Oudegracht <span class="topbar__year">1929</span></h1>
+    <div class="topbar__heading">
+      <p class="topbar__kicker">Het Utrechts Archief</p>
+      <h1 class="topbar__title">Ontmoet de Oudegracht <span class="topbar__year">1929</span></h1>
+    </div>
     <div class="topbar__actions">
-      <button type="button" class="btn btn--icon btn--sound" id="btn-sound" aria-pressed="true" aria-label="Geluid">
+      <button type="button" class="tbtn btn--sound" id="btn-sound" aria-pressed="true">
         <svg class="icon-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
         <svg class="icon-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><path d="M16 9l6 6M22 9l-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <span class="tbtn__label" id="sound-label">Geluid aan</span>
       </button>
-      <button type="button" class="btn btn--icon" id="btn-info" aria-haspopup="dialog" aria-label="Over deze applicatie">i</button>
+      <button type="button" class="tbtn" id="btn-info" aria-haspopup="dialog">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 10.5v6.5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><circle cx="12" cy="7.2" r="1.5" fill="currentColor"/></svg>
+        <span class="tbtn__label">Over</span>
+      </button>
     </div>
+    <span class="topbar__tiles" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
   </header>
 
   <main class="stage">
@@ -59,27 +66,34 @@
     </section>
 
     <section class="block block--map" aria-labelledby="map-heading">
-      <h2 class="block__label" id="map-heading">Vaarroute</h2>
-      <p class="map-hint">Tik op een punt om erheen te varen</p>
       <div class="map-wrap">
         <div id="map"></div>
+        <h2 class="map-tag" id="map-heading">Vaarroute</h2>
         <svg class="map-north" viewBox="0 0 32 46" role="img" aria-label="Noord is boven"><path d="M16 2 L25 22 L16 17 L7 22 Z"/><text x="16" y="42" text-anchor="middle">N</text></svg>
+        <p class="map-hint">Tik op een nummer om erheen te varen</p>
       </div>
     </section>
   </main>
 
   <footer class="bar">
-    <button type="button" class="ctrl ctrl--play" id="btn-play" aria-label="Afspelen">
-      <span aria-hidden="true" id="play-icon">▶</span>
+    <button type="button" class="playbtn" id="btn-play">
+      <span class="playbtn__icon" id="play-icon" aria-hidden="true">▶</span>
+      <span class="playbtn__text" id="play-text">Varen</span>
     </button>
-    <div class="vaarlijn" id="vaarlijn">
-      <div class="vaarlijn__track" aria-hidden="true"></div>
-      <div class="vaarlijn__fill" aria-hidden="true"></div>
-      <label for="timeline" class="visually-hidden">Positie in de film</label>
-      <input type="range" id="timeline" min="0" max="100" step="0.1" value="0">
-      <div class="vaarlijn__ticks" id="stops" aria-hidden="true"></div>
+    <div class="bar__route">
+      <div class="vaarlijn" id="vaarlijn">
+        <div class="vaarlijn__track" aria-hidden="true"></div>
+        <div class="vaarlijn__fill" aria-hidden="true"></div>
+        <label for="timeline" class="visually-hidden">Positie in de film</label>
+        <input type="range" id="timeline" min="0" max="100" step="0.1" value="0">
+        <div class="vaarlijn__ticks" id="stops" aria-hidden="true"></div>
+      </div>
+      <div class="bar__ends" aria-hidden="true"><span id="route-start"></span><span id="route-end"></span></div>
     </div>
-    <p class="bar__status" aria-live="off"><span class="bar__status-label" id="status-label">Volgende stop</span><span class="bar__status-name" id="status-name"></span></p>
+    <p class="bar__status">
+      <span class="bar__status-num" id="status-num" aria-hidden="true"></span>
+      <span class="bar__status-text"><span class="bar__status-label" id="status-label">Volgende stop</span><span class="bar__status-name" id="status-name"></span></span>
+    </p>
     <span class="time visually-hidden" aria-hidden="true"><span id="time-current">0:00</span> / <span id="time-total">0:00</span></span>
   </footer>
 
@@ -100,8 +114,8 @@
     <h2 id="intro-title">Welkom aan boord!</h2>
     <p id="intro-text"></p>
     <ol class="steps">
-      <li><span class="stop-num" aria-hidden="true">1</span> Druk op afspelen en vaar mee</li>
-      <li><span class="stop-num" aria-hidden="true">2</span> Tik op een stop om erheen te varen</li>
+      <li><span class="stop-num" aria-hidden="true">1</span> Druk op <strong>Varen</strong> en vaar mee</li>
+      <li><span class="stop-num" aria-hidden="true">2</span> Tik op een nummer op de kaart om erheen te varen</li>
       <li><span class="stop-num" aria-hidden="true">3</span> Bekijk foto’s en verhalen uit het archief</li>
     </ol>
     <form method="dialog"><button class="btn btn--play btn--wide" value="varen">Ga varen <span aria-hidden="true">▶</span></button></form>

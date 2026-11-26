@@ -37,6 +37,7 @@ export async function createPlayer({ settings, onTime, onState }) {
   const placeholderTime = document.getElementById('placeholder-time');
   const btnPlay = document.getElementById('btn-play');
   const playIcon = document.getElementById('play-icon');
+  const playText = document.getElementById('play-text');
   const btnBack = document.getElementById('btn-back');
   const btnFwd = document.getElementById('btn-forward');
   const range = document.getElementById('timeline');
@@ -91,7 +92,7 @@ export async function createPlayer({ settings, onTime, onState }) {
   function updatePlayButton() {
     const playing = !media.paused && !media.ended;
     playIcon.textContent = playing ? '❚❚' : '▶';
-    btnPlay.setAttribute('aria-label', playing ? 'Pauzeren' : 'Afspelen');
+    if (playText) playText.textContent = playing ? 'Pauze' : 'Varen';
     onState?.(playing);
   }
 
