@@ -582,3 +582,68 @@ button { font: inherit; color: inherit; touch-action: manipulation; }
 .start-choice__sub { font-size: var(--fs-small); line-height: 1.35; }
 .start-choice__btn--auto .start-choice__sub { color: #fff3f1; }
 @media (max-width: 700px) { .start-choice { grid-template-columns: 1fr; } }
+
+/* ===== Thema: donker HUA-paars met papierkleurige kaartjes ===== */
+:root {
+  --zaal: #0b1630;
+  --paneel: #13223f;
+  --paneel-rand: #22345a;
+  --creme: #f3eee4;
+  --gedempt: #aab4c8;
+  --rood-licht: #ff8f7a;
+  --groen-licht: #7fd3c4;
+  --groen-tick: #4fae9e;
+  --papier: #fbf8f1;
+  --papier-donker: #f1eadc;
+  --focus: #f2c94c;
+}
+body { background: var(--zaal); color: var(--creme); }
+:focus-visible { outline-color: var(--focus); }
+
+.topbar { background: var(--paneel); box-shadow: none; border-bottom: 1px solid var(--paneel-rand); }
+.topbar__title { color: var(--creme); }
+.topbar__year { color: var(--rood-licht); }
+.topbar__kicker { color: var(--gedempt); }
+.topbar__kicker::after { color: var(--paneel-rand); }
+.tbtn { color: var(--creme); }
+.tbtn:active { background: var(--paneel-rand); }
+.btn--sound[aria-pressed="false"] { color: var(--gedempt); }
+
+.block, .bar { background: var(--paneel); box-shadow: none; border: 1px solid var(--paneel-rand); }
+.film .video-frame { background: #000; }
+
+.map-label span { color: #2e2a25; background: rgb(251 248 241 / 0.94); }
+.map-north { background: rgb(251 248 241 / 0.94); }
+.map-north path { fill: #2e2a25; }
+.map-north text { fill: #2e2a25; }
+.map-tag { background: var(--papier); color: #b52714; }
+
+.vaarlijn__track { background: var(--paneel-rand); }
+.vtick { background: var(--paneel); border-color: var(--groen-tick); }
+.vtick.is-done { background: var(--groen-tick); }
+.bar__ends { color: var(--gedempt); }
+.bar__status { border-left-color: var(--paneel-rand); }
+.bar__status-label { color: var(--rood-licht); }
+.bar__status-name { color: var(--creme); }
+.bar__status-num { background: var(--papier); border-color: var(--groen-tick); color: var(--hua-green); }
+.bar__status-num.is-current { background: var(--hua-red); border-color: var(--papier); color: #fff; }
+.playbtn { box-shadow: 0 4px 0 #7d170a; }
+
+.stop-popup, .dialog, .attract__card {
+  --hua-white: var(--papier);
+  --hua-text: #2e2a25;
+  --hua-muted: #5f574b;
+  --hua-line: #d8ccb6;
+  background: var(--papier);
+  color: #2e2a25;
+}
+.stop-popup__figure { background: var(--papier-donker); }
+.stop-popup__text { color: #2e2a25; }
+.dialog { box-shadow: 0 0 0 1px var(--paneel-rand); }
+.dialog::backdrop { background: rgb(5 11 26 / 0.78); }
+.dialog h2 { color: var(--hua-green); }
+.start-choice__btn { background: var(--papier); }
+.start-choice__btn--auto { background: var(--hua-red); }
+
+.attract { background: linear-gradient(to top, rgb(5 11 26 / 0.85), rgb(5 11 26 / 0.15) 60%); }
+.film-credit { background: rgb(5 11 26 / 0.72); }
